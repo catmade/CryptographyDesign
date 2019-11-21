@@ -38,8 +38,13 @@
     <ApplicationIcon>locked_with_key_32px_1215152_easyicon.net.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MathNet.Numerics, Version=4.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.4.9.0\lib\net461\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,7 +56,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="utils\Base62.cs" />
+    <Compile Include="DataConfig.cs" />
+    <Compile Include="utils\AffineCipher.cs" />
+    <Compile Include="utils\MatrixInt.cs" />
     <Compile Include="utils\HillCipher.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -62,9 +69,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="utils\ICipher.cs" />
-    <Compile Include="utils\Matrix.cs" />
     <Compile Include="utils\MyCipher.cs" />
-    <Compile Include="utils\WigenereCipher.cs" />
+    <Compile Include="utils\ShiftCipher.cs" />
+    <Compile Include="utils\VigenereCipher.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -78,6 +85,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -97,5 +105,6 @@
   <ItemGroup>
     <Content Include="locked_with_key_32px_1215152_easyicon.net.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

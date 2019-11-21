@@ -42,7 +42,30 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tbSource = new System.Windows.Forms.TextBox();
             this.tbTarget = new System.Windows.Forms.TextBox();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.tbVigenereKey = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.btnSaveKeyToLocal = new System.Windows.Forms.Button();
+            this.btnRandomGenKey = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.tbAffineKeyB = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbHillKey = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tbAffineKeyA = new System.Windows.Forms.TextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.notifyMenu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // notify
@@ -81,82 +104,308 @@
             // 
             // btnEncrypt
             // 
-            this.btnEncrypt.Location = new System.Drawing.Point(351, 77);
+            this.btnEncrypt.BackColor = System.Drawing.Color.MediumSpringGreen;
+            this.btnEncrypt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEncrypt.Location = new System.Drawing.Point(6, 193);
             this.btnEncrypt.Name = "btnEncrypt";
             this.btnEncrypt.Size = new System.Drawing.Size(75, 23);
-            this.btnEncrypt.TabIndex = 5;
+            this.btnEncrypt.TabIndex = 2;
             this.btnEncrypt.Text = "加密";
-            this.btnEncrypt.UseVisualStyleBackColor = true;
+            this.btnEncrypt.UseVisualStyleBackColor = false;
             this.btnEncrypt.Click += new System.EventHandler(this.btnEncrypt_Click);
             // 
             // btnDecrypt
             // 
-            this.btnDecrypt.Location = new System.Drawing.Point(351, 300);
+            this.btnDecrypt.BackColor = System.Drawing.Color.Tomato;
+            this.btnDecrypt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDecrypt.Location = new System.Drawing.Point(87, 193);
             this.btnDecrypt.Name = "btnDecrypt";
             this.btnDecrypt.Size = new System.Drawing.Size(75, 23);
-            this.btnDecrypt.TabIndex = 6;
+            this.btnDecrypt.TabIndex = 3;
             this.btnDecrypt.Text = "解密";
-            this.btnDecrypt.UseVisualStyleBackColor = true;
+            this.btnDecrypt.UseVisualStyleBackColor = false;
             this.btnDecrypt.Click += new System.EventHandler(this.btnDecrypt_Click);
             // 
             // ckbCopyToClipBoard
             // 
             this.ckbCopyToClipBoard.AutoSize = true;
-            this.ckbCopyToClipBoard.Location = new System.Drawing.Point(351, 106);
+            this.ckbCopyToClipBoard.Location = new System.Drawing.Point(6, 222);
             this.ckbCopyToClipBoard.Name = "ckbCopyToClipBoard";
-            this.ckbCopyToClipBoard.Size = new System.Drawing.Size(96, 16);
-            this.ckbCopyToClipBoard.TabIndex = 7;
-            this.ckbCopyToClipBoard.Text = "复制到剪切板";
+            this.ckbCopyToClipBoard.Size = new System.Drawing.Size(135, 21);
+            this.ckbCopyToClipBoard.TabIndex = 4;
+            this.ckbCopyToClipBoard.Text = "将结果复制到剪切板";
             this.toolTip1.SetToolTip(this.ckbCopyToClipBoard, "当勾选此项时，点击加密按钮后，\r\n会将加密结果复制到系统剪切板中");
             this.ckbCopyToClipBoard.UseVisualStyleBackColor = true;
             // 
             // ckbPasteFromClipBoard
             // 
             this.ckbPasteFromClipBoard.AutoSize = true;
-            this.ckbPasteFromClipBoard.Location = new System.Drawing.Point(351, 329);
+            this.ckbPasteFromClipBoard.Location = new System.Drawing.Point(178, 222);
             this.ckbPasteFromClipBoard.Name = "ckbPasteFromClipBoard";
-            this.ckbPasteFromClipBoard.Size = new System.Drawing.Size(96, 16);
-            this.ckbPasteFromClipBoard.TabIndex = 8;
-            this.ckbPasteFromClipBoard.Text = "从剪切板粘贴";
+            this.ckbPasteFromClipBoard.Size = new System.Drawing.Size(123, 21);
+            this.ckbPasteFromClipBoard.TabIndex = 5;
+            this.ckbPasteFromClipBoard.Text = "从剪切板获取文本";
             this.toolTip1.SetToolTip(this.ckbPasteFromClipBoard, "当勾选此项时，点击解密按钮后，\r\n将会读取剪切板中的文本，并将作为密文解密");
             this.ckbPasteFromClipBoard.UseVisualStyleBackColor = true;
             // 
             // tbSource
             // 
             this.tbSource.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tbSource.Location = new System.Drawing.Point(24, 69);
+            this.tbSource.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.errorProvider1.SetIconAlignment(this.tbSource, System.Windows.Forms.ErrorIconAlignment.TopRight);
+            this.tbSource.Location = new System.Drawing.Point(6, 20);
             this.tbSource.Multiline = true;
             this.tbSource.Name = "tbSource";
-            this.tbSource.Size = new System.Drawing.Size(286, 283);
-            this.tbSource.TabIndex = 9;
+            this.tbSource.Size = new System.Drawing.Size(488, 171);
+            this.tbSource.TabIndex = 1;
+            this.tbSource.TextChanged += new System.EventHandler(this.tbSource_TextChanged);
             // 
             // tbTarget
             // 
-            this.tbTarget.Location = new System.Drawing.Point(476, 69);
+            this.tbTarget.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.errorProvider1.SetIconAlignment(this.tbTarget, System.Windows.Forms.ErrorIconAlignment.BottomLeft);
+            this.tbTarget.Location = new System.Drawing.Point(6, 249);
             this.tbTarget.Multiline = true;
             this.tbTarget.Name = "tbTarget";
-            this.tbTarget.Size = new System.Drawing.Size(286, 283);
-            this.tbTarget.TabIndex = 9;
+            this.tbTarget.Size = new System.Drawing.Size(488, 171);
+            this.tbTarget.TabIndex = 6;
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // tbVigenereKey
+            // 
+            this.tbVigenereKey.Font = new System.Drawing.Font("Consolas", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.helpProvider1.SetHelpNavigator(this.tbVigenereKey, System.Windows.Forms.HelpNavigator.TopicId);
+            this.helpProvider1.SetHelpString(this.tbVigenereKey, "数组，0~25，用空格分开");
+            this.tbVigenereKey.Location = new System.Drawing.Point(53, 63);
+            this.tbVigenereKey.MaxLength = 100;
+            this.tbVigenereKey.Name = "tbVigenereKey";
+            this.tbVigenereKey.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.helpProvider1.SetShowHelp(this.tbVigenereKey, true);
+            this.tbVigenereKey.Size = new System.Drawing.Size(190, 24);
+            this.tbVigenereKey.TabIndex = 1;
+            this.tbVigenereKey.TextChanged += new System.EventHandler(this.tbVigenereKey_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Location = new System.Drawing.Point(6, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(92, 17);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "维吉尼亚密码：";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.label9);
+            this.groupBox1.Controls.Add(this.btnSaveKeyToLocal);
+            this.groupBox1.Controls.Add(this.btnRandomGenKey);
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.tbAffineKeyB);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.tbHillKey);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.tbAffineKeyA);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.tbVigenereKey);
+            this.groupBox1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.groupBox1.Location = new System.Drawing.Point(12, 14);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(270, 426);
+            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "1. 密钥配置";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(18, 202);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(28, 14);
+            this.label10.TabIndex = 20;
+            this.label10.Text = "K =";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(86, 183);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(70, 14);
+            this.label9.TabIndex = 19;
+            this.label9.Text = "e(x) = xK";
+            // 
+            // btnSaveKeyToLocal
+            // 
+            this.btnSaveKeyToLocal.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btnSaveKeyToLocal.Location = new System.Drawing.Point(205, 388);
+            this.btnSaveKeyToLocal.Name = "btnSaveKeyToLocal";
+            this.btnSaveKeyToLocal.Size = new System.Drawing.Size(65, 32);
+            this.btnSaveKeyToLocal.TabIndex = 6;
+            this.btnSaveKeyToLocal.Text = "保存密钥";
+            this.btnSaveKeyToLocal.UseVisualStyleBackColor = false;
+            this.btnSaveKeyToLocal.Click += new System.EventHandler(this.btnSaveKeyToLocal_Click);
+            // 
+            // btnRandomGenKey
+            // 
+            this.btnRandomGenKey.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btnRandomGenKey.Location = new System.Drawing.Point(99, 388);
+            this.btnRandomGenKey.Name = "btnRandomGenKey";
+            this.btnRandomGenKey.Size = new System.Drawing.Size(100, 32);
+            this.btnRandomGenKey.TabIndex = 5;
+            this.btnRandomGenKey.Text = "生成随机密钥";
+            this.btnRandomGenKey.UseVisualStyleBackColor = false;
+            this.btnRandomGenKey.Click += new System.EventHandler(this.btnRandomGenKey_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(18, 136);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(28, 14);
+            this.label8.TabIndex = 17;
+            this.label8.Text = "a =";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(110, 136);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(28, 14);
+            this.label7.TabIndex = 16;
+            this.label7.Text = "b =";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(18, 69);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(35, 14);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "Km =";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(16, 44);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(224, 14);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "e(x1..xm) = (x1 + k1...xm + km)";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(67, 107);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(161, 14);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "e(x) = (ax + b) mod 26";
+            // 
+            // tbAffineKeyB
+            // 
+            this.tbAffineKeyB.Font = new System.Drawing.Font("Consolas", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbAffineKeyB.Location = new System.Drawing.Point(144, 130);
+            this.tbAffineKeyB.MaxLength = 3;
+            this.tbAffineKeyB.Name = "tbAffineKeyB";
+            this.tbAffineKeyB.Size = new System.Drawing.Size(39, 24);
+            this.tbAffineKeyB.TabIndex = 3;
+            this.tbAffineKeyB.TextChanged += new System.EventHandler(this.tbAffineKeyB_TextChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label3.Location = new System.Drawing.Point(6, 183);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(68, 17);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "希尔密码：";
+            // 
+            // tbHillKey
+            // 
+            this.tbHillKey.Font = new System.Drawing.Font("Consolas", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.helpProvider1.SetHelpString(this.tbHillKey, "可逆方阵");
+            this.tbHillKey.Location = new System.Drawing.Point(52, 202);
+            this.tbHillKey.MaxLength = 10000;
+            this.tbHillKey.Multiline = true;
+            this.tbHillKey.Name = "tbHillKey";
+            this.tbHillKey.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.helpProvider1.SetShowHelp(this.tbHillKey, true);
+            this.tbHillKey.Size = new System.Drawing.Size(190, 154);
+            this.tbHillKey.TabIndex = 4;
+            this.tbHillKey.WordWrap = false;
+            this.tbHillKey.TextChanged += new System.EventHandler(this.tbHillKey_TextChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label2.Location = new System.Drawing.Point(6, 106);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(68, 17);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "仿射密码：";
+            // 
+            // tbAffineKeyA
+            // 
+            this.tbAffineKeyA.Font = new System.Drawing.Font("Consolas", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbAffineKeyA.Location = new System.Drawing.Point(52, 130);
+            this.tbAffineKeyA.MaxLength = 3;
+            this.tbAffineKeyA.Name = "tbAffineKeyA";
+            this.tbAffineKeyA.Size = new System.Drawing.Size(39, 24);
+            this.tbAffineKeyA.TabIndex = 2;
+            this.tbAffineKeyA.TextChanged += new System.EventHandler(this.tbAffineKeyA_TextChanged);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.btnEncrypt);
+            this.groupBox2.Controls.Add(this.btnDecrypt);
+            this.groupBox2.Controls.Add(this.ckbCopyToClipBoard);
+            this.groupBox2.Controls.Add(this.ckbPasteFromClipBoard);
+            this.groupBox2.Controls.Add(this.tbSource);
+            this.groupBox2.Controls.Add(this.tbTarget);
+            this.groupBox2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.groupBox2.Location = new System.Drawing.Point(288, 12);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(500, 426);
+            this.groupBox2.TabIndex = 13;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "2. 加解密";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.tbTarget);
-            this.Controls.Add(this.tbSource);
-            this.Controls.Add(this.ckbPasteFromClipBoard);
-            this.Controls.Add(this.ckbCopyToClipBoard);
-            this.Controls.Add(this.btnDecrypt);
-            this.Controls.Add(this.btnEncrypt);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "剪切板内容加解密工具";
             this.notifyMenu.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -174,6 +423,26 @@
         private System.Windows.Forms.CheckBox ckbPasteFromClipBoard;
         private System.Windows.Forms.TextBox tbSource;
         private System.Windows.Forms.TextBox tbTarget;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox tbVigenereKey;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbHillKey;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tbAffineKeyA;
+        private System.Windows.Forms.Button btnRandomGenKey;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox tbAffineKeyB;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button btnSaveKeyToLocal;
+        private System.Windows.Forms.HelpProvider helpProvider1;
     }
 }
 
