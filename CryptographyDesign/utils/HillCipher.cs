@@ -1,11 +1,7 @@
-﻿using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CryptographyDesign.utils
 {
@@ -30,11 +26,6 @@ namespace CryptographyDesign.utils
         private readonly int groupLength;
 
         /// <summary>
-        /// 精度
-        /// </summary>
-        private readonly double e = 1.0E-1;
-
-        /// <summary>
         /// 分组数据不够时填充的字符
         /// </summary>
         private const char Append_Char = (char)0;
@@ -57,10 +48,18 @@ namespace CryptographyDesign.utils
             }
             this.DKEY = EKEY.Inverse();
             this.groupLength = ekey.GetLength(0);   // 如果执行到这里，已经说明矩阵是方阵
+
+            // TODO Delete
+            Debug.WriteLine($"{EKEY.ToString()}{System.Environment.NewLine}" +
+                $"x{System.Environment.NewLine}{DKEY.ToString()}{System.Environment.NewLine}" +
+                $"={System.Environment.NewLine}{EKEY.MultifyMod(DKEY)}");
         }
 
         public List<char> Decrypt(List<char> cipher)
         {
+            // TODO Delete
+            PrintList(cipher, "[解密前]");
+
             if (cipher.Count % groupLength != 0)
             {
                 throw new FormatException("密文的格式出错，请检查是否缺失数据");
@@ -76,18 +75,21 @@ namespace CryptographyDesign.utils
                 result.AddRange(MatrixIntGF26.MultiplyMod26(cipher.GetRange(i * groupLength, groupLength).ToArray(), DKEY));
             }
 
+            // TODO Delete
+            PrintList(result, "[解密后]");
+
             // 去冗余，去除终结符之后的数据
             var index = result.LastIndexOf(Transfer_Char);
-            if(index == -1)
+            if (index == -1)
             {
-                //throw new Exception("数据出错，或者数据和希尔密码的密钥不匹配");
+                throw new Exception("数据出错，或者数据和希尔密码的密钥不匹配");
             }
             result.RemoveRange(index, result.Count - index);
 
             // 合并连续的两个终结符
             for (int i = 1; i < result.Count; i++)
             {
-                if(result[i] == Transfer_Char)
+                if (result[i] == Transfer_Char)
                 {
                     if (result[i - 1] == Transfer_Char)
                     {
@@ -96,14 +98,12 @@ namespace CryptographyDesign.utils
                 }
             }
 
+
             return result;
         }
 
         public List<char> Encrypt(List<char> plain)
         {
-            // TODO delete 
-
-
             // 拷贝plain
             var copy = new List<char>();
             for (int i = 0; i < plain.Count; i++)
@@ -114,7 +114,7 @@ namespace CryptographyDesign.utils
             // 将终结符转义，即将一个终结符换成两个连续的终结符
             for (int i = 0; i < copy.Count; i++)
             {
-                if(copy[i] == Transfer_Char)
+                if (copy[i] == Transfer_Char)
                 {
                     copy.Insert(i, Transfer_Char);
                     i++;
@@ -126,7 +126,7 @@ namespace CryptographyDesign.utils
 
             // 检查数据总长度，如果最后一组数量不够，需要填充数据
             int appendLength = copy.Count % groupLength;// 填充数
-            if(appendLength != 0)
+            if (appendLength != 0)
             {
                 appendLength = groupLength - appendLength;
             }
@@ -135,6 +135,9 @@ namespace CryptographyDesign.utils
             {
                 copy.Add(Append_Char);
             }
+
+            // TODO Delete
+            PrintList(copy, "[加密前]");
 
             int groupNums = copy.Count / groupLength + ((copy.Count % groupLength) == 0 ? 0 : 1);   // 总分组数
 
@@ -145,17 +148,28 @@ namespace CryptographyDesign.utils
                 result.AddRange(MatrixIntGF26.MultiplyMod26(copy.GetRange(i * groupLength, groupLength).ToArray(), EKEY));
             }
 
+            // TODO Delete
+            PrintList(result, "[加密后]");
+
             return result;
         }
 
-        void print(List<char> a)
+        // TODO Delete
+        void PrintList(List<char> a, string title)
         {
+            Debug.WriteLine(title);
+            Debug.Write("字符序号：");
             for (int i = 0; i < a.Count; i++)
             {
-
+                Debug.Write(((int)a[i]).ToString().PadLeft(2, '0'));
+                Debug.Write(" ");
             }
+            Debug.Write("\n字符序列：");
+            Debug.WriteLine(NumListToString(a));
+            Debug.WriteLine("");
         }
 
+        // TODO Delete
         string NumListToString(List<char> list)
         {
             StringBuilder builder = new StringBuilder();
@@ -163,7 +177,7 @@ namespace CryptographyDesign.utils
             // 将List<char> 转成string
             for (int i = 0; i < list.Count; i++)
             {
-                builder.Append((char)('a' + i));
+                builder.Append((char)('a' + list[i]));
             }
 
             return builder.ToString();

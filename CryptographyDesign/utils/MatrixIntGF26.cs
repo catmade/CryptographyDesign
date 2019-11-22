@@ -1,10 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CryptographyDesign.utils
 {
@@ -21,7 +18,7 @@ namespace CryptographyDesign.utils
         /// <summary>
         /// 限定计算为模运算，默认为模1
         /// </summary>
-        private static int mod = 26;
+        private const int mod = 26;
 
         /// <summary>
         /// 行列式
@@ -50,16 +47,16 @@ namespace CryptographyDesign.utils
             //        = A的伴随式 × A的行列式的逆元
             var matrix = CreateMatrix.DenseOfArray(this.elements);
             determinant = matrix.Determinant();     // 行列式
-            var _ = Mod(SolveDouble(determinant));
+            var _ = Mod(SolveBigDouble(determinant));
             if (InverseNum.ContainsKey(_))
             {
                 detInverse = InverseNum[_];
             }
-            
+
         }
 
         /// <summary>
-        /// 将double矩阵转化成int矩阵，注意精度
+        /// 将double矩阵转化成int矩阵，并求模，注意精度
         /// </summary>
         /// <param name="matrix"></param>
         /// <returns></returns>
@@ -70,7 +67,7 @@ namespace CryptographyDesign.utils
             {
                 for (int j = 0; j < column; j++)
                 {
-                    result[i, j] = SolveDouble(matrix[i, j]);
+                    result[i, j] = Mod(SolveBigDouble(matrix[i, j]));
                 }
             }
 
@@ -154,9 +151,8 @@ namespace CryptographyDesign.utils
             var inverse = matrix.Inverse();             // 逆矩阵
             var adjoint = inverse * determinant;        // 伴随矩阵
 
-            // 将矩阵化为整数
-            var adjointInt = new int[row, column];
-            adjointInt = ToIntMatrix(adjoint);
+            // 将矩阵化为整数并求模
+            var adjointInt = ToIntMatrix(adjoint);
 
             // 再求矩阵的有限域下的逆
             var result = new int[row, column];
@@ -181,6 +177,16 @@ namespace CryptographyDesign.utils
             return (n % mod + mod) % mod;
         }
 
+        /// <summary>
+        /// 求一个数模 m 后的正数值
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        private static int Mod(long n)
+        {
+            return (int)((n % mod + mod) % mod);
+        }
+
         #region mod 下求 a 的逆元
 
         private static Dictionary<int, int> inverseNum;
@@ -191,19 +197,21 @@ namespace CryptographyDesign.utils
             {
                 if (inverseNum == null)
                 {
-                    inverseNum = new Dictionary<int, int>();
-                    inverseNum.Add(1, 1);
-                    inverseNum.Add(3, 9);
-                    inverseNum.Add(5, 21);
-                    inverseNum.Add(7, 15);
-                    inverseNum.Add(9, 3);
-                    inverseNum.Add(11, 19);
-                    inverseNum.Add(15, 7);
-                    inverseNum.Add(17, 23);
-                    inverseNum.Add(19, 11);
-                    inverseNum.Add(21, 5);
-                    inverseNum.Add(23, 17);
-                    inverseNum.Add(25, 25);
+                    inverseNum = new Dictionary<int, int>
+                    {
+                        { 1, 1 },
+                        { 3, 9 },
+                        { 5, 21 },
+                        { 7, 15 },
+                        { 9, 3 },
+                        { 11, 19 },
+                        { 15, 7 },
+                        { 17, 23 },
+                        { 19, 11 },
+                        { 21, 5 },
+                        { 23, 17 },
+                        { 25, 25 }
+                    };
                 }
                 return inverseNum;
             }
@@ -226,12 +234,12 @@ namespace CryptographyDesign.utils
             }
 
             // 如果行列式不为0，且逆元存在，说明可以计算逆矩阵
-            if(determinant == 0)
+            if (determinant == 0)
             {
                 return false;
             }
 
-            if(detInverse == -1)
+            if (detInverse == -1)
             {
                 return false;
             }
@@ -292,19 +300,56 @@ namespace CryptographyDesign.utils
 
             throw new Exception("精度过高，转换成整数时数据差错过大");
         }
+
+        /// <summary>
+        /// 在一定精度下，将double 转成int
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        private static long SolveBigDouble(double d)
+        {
+            double e = 1.0E-2;  // 精度
+            int sign = d >= 0 ? 1 : -1; // d的正负
+
+            d = Math.Abs(d);    // d取绝对值
+            // 2.999 = 3，2.001 = 2
+            long integer = (long)d;       // 整数位
+            double ddd = d - integer;   // 小数位
+            if (ddd + e >= 1)
+            {
+                return sign * (integer + 1);
+            }
+
+            if (ddd - e < 0)
+            {
+                return sign * integer;
+            }
+
+            throw new Exception("精度过高，转换成整数时数据差错过大");
+        }
+
         #endregion
 
-        private void Printf(int[,] matrix)
+        public override string ToString()
         {
-            for (int i = 0; i < matrix.GetLength(0); i++)
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < row; i++)
             {
-                for (int j = 0; j < matrix.GetLength(1); j++)
+                for (int j = 0; j < column; j++)
                 {
-                    Debug.Write(matrix[i, j] + "  ");
+                    builder.Append(elements[i, j].ToString().PadLeft(2, '0'));
+                    if (j != column - 1)
+                    {
+                        builder.Append(' ');
+                    }
                 }
-                Debug.WriteLine("");
+                if (i != row - 1)
+                {
+                    builder.Append(System.Environment.NewLine);
+                }
             }
-            Debug.WriteLine("");
+
+            return builder.ToString();
         }
     }
 }

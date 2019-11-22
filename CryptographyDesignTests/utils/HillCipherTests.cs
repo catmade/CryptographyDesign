@@ -20,44 +20,40 @@ namespace CryptographyDesign.utils.Tests
         [Test()]
         public void HillCipherTest()
         {
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    // 随机生成测试明文
-            //    var plain = new List<char>();
-            //    plain.Add((char)12);
-            //    plain.Add((char)10);
-            //    plain.Add((char)1);
-            //    plain.Add((char)6);
-            //    plain.Add((char)18);
-            //    plain.Add((char)25);
-            //    plain.Add((char)6);
-            //    plain.Add((char)20);
-            //    plain.Add((char)25);
-            //    plain.Add((char)25);
+            // 这个矩阵有问题，//后来发现是不能求逆
+            int[,] ekey = new int[,] {
+{10, 05, 07, 02, 08, 21, 09, 16, 24},
+{23, 02, 11, 16, 16, 04, 15, 09, 23},
+{07, 07, 01, 19, 04, 04, 20, 23, 20},
+{19, 16, 21, 05, 02, 02, 18, 20, 15},
+{12, 24, 05, 19, 20, 08, 14, 14, 07},
+{13, 03, 16, 04, 04, 02, 03, 21, 14},
+{18, 15, 02, 04, 07, 10, 01, 15, 24},
+{04, 19, 01, 09, 23, 21, 13, 04, 09},
+{18, 12, 11, 18, 05, 14, 22, 08, 21}};
 
-            //    HillCipher cipher = new HillCipher(m1);
-            //    // 测试加密功能
-            //    Assert.AreEqual(plain, cipher.Decrypt(cipher.Encrypt(plain)));
-            //}
+            var mat = new MatrixIntGF26(ekey);
+            var inv = mat.Inverse();
+            var mul = mat.MultifyMod(inv);
         }
 
         [Test()]
         public void HillCipherTest1()
-        {
-            // 进行随机测试，测试加密密文和解密密文是否相等
-            int time = 10;          // 测试次数
-            Random random = new Random();
-            HillCipher cipher = new HillCipher(RandomHelper.GetHillMatrix());
-
-            // 进行time次测试
-            for (int i = 0; i < time; i++)
             {
-                // 随机生成测试明文
-                var plain = RandomHelper.GetCharList();
-                var re = cipher.Decrypt(cipher.Encrypt(plain));
-                Assert.AreEqual(plain, re);
+                // 进行随机测试，测试加密密文和解密密文是否相等
+                int time = 100;          // 测试次数
+                Random random = new Random();
+                HillCipher cipher = new HillCipher(RandomHelper.GetHillMatrix());
+
+                // 进行time次测试
+                for (int i = 0; i < time; i++)
+                {
+                    // 随机生成测试明文
+                    var plain = RandomHelper.GetCharList();
+                    var re = cipher.Decrypt(cipher.Encrypt(plain));
+                    Assert.AreEqual(plain, re);
+                }
             }
-        }
 
         [Test()]
         public void DecryptTest()

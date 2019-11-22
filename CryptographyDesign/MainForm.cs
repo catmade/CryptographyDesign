@@ -1,14 +1,8 @@
 ﻿using CryptographyDesign.utils;
-using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CryptographyDesign
@@ -41,7 +35,7 @@ namespace CryptographyDesign
         {
             if (!isKeysStringOk)
             {
-                MessageBox.Show($"密钥格式错误，请核对密钥格式后再试。或者点击“{this.btnGenRandomKey.Text}”按钮，即可自动生成随机密钥", 
+                MessageBox.Show($"密钥格式错误，请核对密钥格式后再试。或者点击“{this.btnGenRandomKey.Text}”按钮，即可自动生成随机密钥",
                     "密钥错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
@@ -74,7 +68,7 @@ namespace CryptographyDesign
             }
 
             // 如果矩阵行列式为 0, 说明没有逆矩阵
-            if (CreateMatrix.DenseOfArray(IntMatrixToDouble(hillMatrix)).Determinant() == 0)
+            if (!new MatrixIntGF26(hillMatrix).HasInverse())
             {
                 MessageBox.Show("希尔密码的加密矩阵错误，加密矩阵必须为可逆矩阵",
                     "密钥错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -115,7 +109,7 @@ namespace CryptographyDesign
             for (int i = 0; i < lines.Length; i++)
             {
                 var items = regexBlank.Split(lines[i]);
-                if(items.Length != column)
+                if (items.Length != column)
                 {
                     throw new Exception($"矩阵格式错误，并不是每个位置都有数据");
                 }
@@ -158,14 +152,14 @@ namespace CryptographyDesign
                 return;
             }
 
-            // 待处理的文本为空
-            if ("".Equals(tbSource.Text))
+            // 判断源文本是否符合要求
+            if (!isSourceStringOk || "".Equals(tbSource.Text))
             {
-                MessageBox.Show("待处理文本为空，没有什么好处理的",
-                    "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("请检查【明文/密文】输入框中的待处理文本是否符合要求",
+                    "出错了", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
+
             // 将明文转成全小写
             this.tbSource.Text = this.tbSource.Text.ToLower();
 
@@ -188,11 +182,11 @@ namespace CryptographyDesign
                 return;
             }
 
-            // 待处理的文本为空
-            if ("".Equals(tbSource.Text))
+            // 判断源文本是否符合要求
+            if (!isSourceStringOk || "".Equals(tbSource.Text))
             {
-                MessageBox.Show("待处理文本为空，没有什么好处理的",
-                    "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("请检查【明文/密文】输入框中的待处理文本是否符合要求",
+                    "出错了", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -200,7 +194,17 @@ namespace CryptographyDesign
             {
                 if (!string.Empty.Equals(Clipboard.GetText()))
                 {
-                    tbSource.Text = Clipboard.GetText();
+                    try
+                    {
+                        tbSource.Text = Clipboard.GetText();
+                    }
+                    catch (Exception exp)
+                    {
+
+                        MessageBox.Show(exp.Message,
+                            "出错了", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
             }
             tbTarget.Text = myCipher.Decrypt(tbSource.Text);
@@ -211,7 +215,17 @@ namespace CryptographyDesign
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnSaveKeyToLocal_Click(object sender, EventArgs e)
+        private void btnExportKeys_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// 从本地读取密钥
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnImportKeys_Click(object sender, EventArgs e)
         {
 
         }
@@ -239,7 +253,7 @@ namespace CryptographyDesign
 
             // 生成希尔密码的加密矩阵
             int rank = random.Next(5, 10); // 矩阵的阶数
-            double[,] vs = new double[rank,rank];
+            int[,] vs = new int[rank, rank];
             while (true)
             {
                 for (int i = 0; i < rank; i++)
@@ -249,8 +263,8 @@ namespace CryptographyDesign
                         vs[i, j] = random.Next(1, 25);
                     }
                 }
-                // 如果矩阵行列式不为 0, 说明有逆矩阵，则跳出循环
-                if (CreateMatrix.DenseOfArray(vs).Determinant() != 0)
+
+                if (new MatrixIntGF26(vs).HasInverse())
                 {
                     break;
                 }
@@ -278,7 +292,7 @@ namespace CryptographyDesign
         /// </summary>
         /// <param name="matrix"></param>
         /// <returns></returns>
-        private string MatrixToString(double[,] matrix)
+        private string MatrixToString(int[,] matrix)
         {
             StringBuilder builder = new StringBuilder();
             int row = matrix.GetLength(0);
@@ -340,18 +354,20 @@ namespace CryptographyDesign
         /// </summary>
         private static Regex regexVigenereKeyText = new Regex($"^{regexSingleLineText}$");
 
+        public bool isSourceStringOk { get; private set; }
+
         private void tbSource_TextChanged(object sender, EventArgs e)
         {
             if (!regexSourceText.IsMatch(this.tbSource.Text))
             {
                 this.errorProvider1.SetError(this.tbSource,
                     $"数据格式错误，仅接收26个字母，不区分大小写，但是程序会自动全部转成小写");
-                isKeysStringOk = false;
+                isSourceStringOk = false;
                 return;
             }
 
             this.errorProvider1.SetError(this.tbSource, null);
-            isKeysStringOk = true;
+            isSourceStringOk = true;
         }
 
         private void tbHillKey_TextChanged(object sender, EventArgs e)
@@ -370,7 +386,7 @@ namespace CryptographyDesign
 
         private void tbAffineKeyA_TextChanged(object sender, EventArgs e)
         {
-            if (!regexAffineKeyAText.IsMatch(this.tbAffineKeyA.Text) )
+            if (!regexAffineKeyAText.IsMatch(this.tbAffineKeyA.Text))
             {
                 this.errorProvider1.SetError(this.tbAffineKeyA,
                     $"数据格式错误，数据为0-25之间的整数");
@@ -413,5 +429,6 @@ namespace CryptographyDesign
         }
 
         #endregion
+
     }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CryptographyDesign.utils
 {
@@ -14,15 +12,15 @@ namespace CryptographyDesign.utils
         private readonly char[] Characters = new char[]
                {
                 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
-                'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 
+                'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
                 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
                };
 
-        private VigenereCipher vigenereCipher;
+        private readonly VigenereCipher vigenereCipher;
 
-        private AffineCipher affineCipher;
+        private readonly AffineCipher affineCipher;
 
-        private HillCipher hillCipher;
+        private readonly HillCipher hillCipher;
 
         /// <summary>
         /// 构造函数
@@ -42,8 +40,7 @@ namespace CryptographyDesign.utils
         {
             var data = StringToNumList(cipher);
 
-            ///var hill = this.hillCipher.Decrypt(data);
-            var hill = data;
+            var hill = this.hillCipher.Decrypt(data);
 
             var affine = this.affineCipher.Decrypt(hill);
 
@@ -62,8 +59,7 @@ namespace CryptographyDesign.utils
 
             var affine = this.affineCipher.Encrypt(vigenere);
 
-            ///var hill = this.hillCipher.Encrypt(affine);
-            var hill = affine;
+            var hill = this.hillCipher.Encrypt(affine);
 
             return NumListToString(hill);
         }

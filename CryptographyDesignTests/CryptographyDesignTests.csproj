@@ -63,7 +63,6 @@
     <Compile Include="utils\AffineCipherTests.cs" />
     <Compile Include="utils\HillCipherTests.cs" />
     <Compile Include="utils\MatrixIntGF26Tests.cs" />
-    <Compile Include="utils\MatrixIntTests.cs" />
     <Compile Include="utils\MyCipherTests.cs" />
     <Compile Include="utils\RandomHelper.cs" />
     <Compile Include="utils\UnitTest1.cs" />
