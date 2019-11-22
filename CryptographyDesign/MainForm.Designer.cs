@@ -43,13 +43,14 @@
             this.tbSource = new System.Windows.Forms.TextBox();
             this.tbTarget = new System.Windows.Forms.TextBox();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.tbHillKey = new System.Windows.Forms.TextBox();
             this.tbVigenereKey = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.btnSaveKeyToLocal = new System.Windows.Forms.Button();
-            this.btnRandomGenKey = new System.Windows.Forms.Button();
+            this.btnGenRandomKey = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -57,7 +58,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.tbAffineKeyB = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.tbHillKey = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tbAffineKeyA = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -152,11 +152,11 @@
             // 
             this.tbSource.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tbSource.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.errorProvider1.SetIconAlignment(this.tbSource, System.Windows.Forms.ErrorIconAlignment.TopRight);
+            this.errorProvider1.SetIconAlignment(this.tbSource, System.Windows.Forms.ErrorIconAlignment.BottomRight);
             this.tbSource.Location = new System.Drawing.Point(6, 20);
             this.tbSource.Multiline = true;
             this.tbSource.Name = "tbSource";
-            this.tbSource.Size = new System.Drawing.Size(488, 171);
+            this.tbSource.Size = new System.Drawing.Size(467, 171);
             this.tbSource.TabIndex = 1;
             this.tbSource.TextChanged += new System.EventHandler(this.tbSource_TextChanged);
             // 
@@ -167,12 +167,28 @@
             this.tbTarget.Location = new System.Drawing.Point(6, 249);
             this.tbTarget.Multiline = true;
             this.tbTarget.Name = "tbTarget";
-            this.tbTarget.Size = new System.Drawing.Size(488, 171);
+            this.tbTarget.Size = new System.Drawing.Size(467, 171);
             this.tbTarget.TabIndex = 6;
             // 
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
+            // 
+            // tbHillKey
+            // 
+            this.tbHillKey.Font = new System.Drawing.Font("Consolas", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.helpProvider1.SetHelpString(this.tbHillKey, "可逆方阵");
+            this.errorProvider1.SetIconAlignment(this.tbHillKey, System.Windows.Forms.ErrorIconAlignment.TopRight);
+            this.tbHillKey.Location = new System.Drawing.Point(52, 202);
+            this.tbHillKey.MaxLength = 10000;
+            this.tbHillKey.Multiline = true;
+            this.tbHillKey.Name = "tbHillKey";
+            this.tbHillKey.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.helpProvider1.SetShowHelp(this.tbHillKey, true);
+            this.tbHillKey.Size = new System.Drawing.Size(190, 154);
+            this.tbHillKey.TabIndex = 4;
+            this.tbHillKey.WordWrap = false;
+            this.tbHillKey.TextChanged += new System.EventHandler(this.tbHillKey_TextChanged);
             // 
             // tbVigenereKey
             // 
@@ -203,7 +219,7 @@
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.btnSaveKeyToLocal);
-            this.groupBox1.Controls.Add(this.btnRandomGenKey);
+            this.groupBox1.Controls.Add(this.btnGenRandomKey);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.label6);
@@ -255,16 +271,16 @@
             this.btnSaveKeyToLocal.UseVisualStyleBackColor = false;
             this.btnSaveKeyToLocal.Click += new System.EventHandler(this.btnSaveKeyToLocal_Click);
             // 
-            // btnRandomGenKey
+            // btnGenRandomKey
             // 
-            this.btnRandomGenKey.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.btnRandomGenKey.Location = new System.Drawing.Point(99, 388);
-            this.btnRandomGenKey.Name = "btnRandomGenKey";
-            this.btnRandomGenKey.Size = new System.Drawing.Size(100, 32);
-            this.btnRandomGenKey.TabIndex = 5;
-            this.btnRandomGenKey.Text = "生成随机密钥";
-            this.btnRandomGenKey.UseVisualStyleBackColor = false;
-            this.btnRandomGenKey.Click += new System.EventHandler(this.btnRandomGenKey_Click);
+            this.btnGenRandomKey.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btnGenRandomKey.Location = new System.Drawing.Point(99, 388);
+            this.btnGenRandomKey.Name = "btnGenRandomKey";
+            this.btnGenRandomKey.Size = new System.Drawing.Size(100, 32);
+            this.btnGenRandomKey.TabIndex = 5;
+            this.btnGenRandomKey.Text = "生成随机密钥";
+            this.btnGenRandomKey.UseVisualStyleBackColor = false;
+            this.btnGenRandomKey.Click += new System.EventHandler(this.btnGenRandomKey_Click);
             // 
             // label8
             // 
@@ -320,7 +336,7 @@
             // 
             this.tbAffineKeyB.Font = new System.Drawing.Font("Consolas", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbAffineKeyB.Location = new System.Drawing.Point(144, 130);
-            this.tbAffineKeyB.MaxLength = 3;
+            this.tbAffineKeyB.MaxLength = 2;
             this.tbAffineKeyB.Name = "tbAffineKeyB";
             this.tbAffineKeyB.Size = new System.Drawing.Size(39, 24);
             this.tbAffineKeyB.TabIndex = 3;
@@ -336,21 +352,6 @@
             this.label3.TabIndex = 11;
             this.label3.Text = "希尔密码：";
             // 
-            // tbHillKey
-            // 
-            this.tbHillKey.Font = new System.Drawing.Font("Consolas", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.helpProvider1.SetHelpString(this.tbHillKey, "可逆方阵");
-            this.tbHillKey.Location = new System.Drawing.Point(52, 202);
-            this.tbHillKey.MaxLength = 10000;
-            this.tbHillKey.Multiline = true;
-            this.tbHillKey.Name = "tbHillKey";
-            this.tbHillKey.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.helpProvider1.SetShowHelp(this.tbHillKey, true);
-            this.tbHillKey.Size = new System.Drawing.Size(190, 154);
-            this.tbHillKey.TabIndex = 4;
-            this.tbHillKey.WordWrap = false;
-            this.tbHillKey.TextChanged += new System.EventHandler(this.tbHillKey_TextChanged);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -365,7 +366,7 @@
             // 
             this.tbAffineKeyA.Font = new System.Drawing.Font("Consolas", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbAffineKeyA.Location = new System.Drawing.Point(52, 130);
-            this.tbAffineKeyA.MaxLength = 3;
+            this.tbAffineKeyA.MaxLength = 2;
             this.tbAffineKeyA.Name = "tbAffineKeyA";
             this.tbAffineKeyA.Size = new System.Drawing.Size(39, 24);
             this.tbAffineKeyA.TabIndex = 2;
@@ -432,7 +433,7 @@
         private System.Windows.Forms.TextBox tbHillKey;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbAffineKeyA;
-        private System.Windows.Forms.Button btnRandomGenKey;
+        private System.Windows.Forms.Button btnGenRandomKey;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;

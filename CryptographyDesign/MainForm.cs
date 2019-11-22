@@ -17,54 +17,155 @@ namespace CryptographyDesign
     {
         private MyCipher myCipher;
 
-        private bool isKeysOk = false;
-
         public MainForm()
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// 是否所有的密钥输入框中的文本都符合要求
+        /// </summary>
+        private bool isKeysStringOk = false;
 
         private void exitMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
+        #region 点击加密按钮前的准备，获取密钥并判断是否合适
         /// <summary>
         /// 初始化加密对象
         /// </summary>
         /// <returns>初始化成功则返回true</returns>
         private bool init()
         {
-            //try
-            //{
-            int[,] keys = { { 123, 232, 185, 122 }, { 15, 879, 154, 665 }, { 12, 202, 356, 123 }, { 12, 15, 54, 546 } };
-            int[][] key = new int[4][];
-            for (int i = 0; i < 4; i++)
+            if (!isKeysStringOk)
             {
-                key[i] = new int[4];
-                for (int j = 0; j < 4; j++)
-                {
-                    key[i][j] = keys[i, j];
-                }
+                MessageBox.Show($"密钥格式错误，请核对密钥格式后再试。或者点击“{this.btnGenRandomKey.Text}”按钮，即可自动生成随机密钥", 
+                    "密钥错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-            myCipher = new MyCipher(key);
-            // 去除字符串前后的空白符
-            tbSource.Text = tbSource.Text.Trim();
-            return true;
+            // 初始化
+            // 获取维吉尼亚密码的密钥
+            int[] vigenereKey = StringToIntArray(tbVigenereKey.Text);
 
+            // 生成仿射密码的密钥
+            int affineKeyA = int.Parse(tbAffineKeyA.Text);
+            int affineKeyB = int.Parse(tbAffineKeyB.Text);
+            if (!AffineCipher.IsKeyASuitable(affineKeyA))
+            {
+                MessageBox.Show("仿射密码的参数a必须要与26互素数，必须为以下值中的一个：\n" +
+                    "1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25",
+                    "密钥错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            // 生成希尔密码的加密矩阵
+            int[,] hillMatrix;
+            try
+            {
+                hillMatrix = StringToIntMatrix(tbHillKey.Text);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message,
+                    "密钥错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            // 如果矩阵行列式为 0, 说明没有逆矩阵
+            if (CreateMatrix.DenseOfArray(IntMatrixToDouble(hillMatrix)).Determinant() == 0)
+            {
+                MessageBox.Show("希尔密码的加密矩阵错误，加密矩阵必须为可逆矩阵",
+                    "密钥错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            // 初始化
+            this.myCipher = new MyCipher(vigenereKey, affineKeyA, affineKeyB, hillMatrix);
+
+            return true;
         }
 
+        private int[] StringToIntArray(string s)
+        {
+            s = s.Trim();
+            Regex regex = new Regex("\\s+");
+            var nums = regex.Split(s);
+            int[] result = new int[nums.Length];
+            for (int i = 0; i < nums.Length; i++)
+            {
+                result[i] = int.Parse(nums[i]);
+            }
+
+            return result;
+        }
+
+        private int[,] StringToIntMatrix(string s)
+        {
+            s = s.Trim();
+            Regex regexNewLine = new Regex("\\r\\n|\\n|\\r");
+            Regex regexBlank = new Regex("[ ]");
+
+            var lines = regexNewLine.Split(s);
+            int column = regexBlank.Split(lines[0]).Length;
+
+            int[,] result = new int[lines.Length, column];
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                var items = regexBlank.Split(lines[i]);
+                if(items.Length != column)
+                {
+                    throw new Exception($"矩阵格式错误，并不是每个位置都有数据");
+                }
+                for (int j = 0; j < items.Length; j++)
+                {
+                    result[i, j] = int.Parse(items[j]);
+                }
+            }
+
+
+            return result;
+        }
+
+        private double[,] IntMatrixToDouble(int[,] matrix)
+        {
+            var result = new double[matrix.GetLength(0), matrix.GetLength(1)];
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    result[i, j] = matrix[i, j];
+                }
+            }
+            return result;
+        }
+
+        #endregion
+
+        #region 按钮的监听事件
         /// <summary>
-        /// 加密
+        /// 加密按钮点击后
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnEncrypt_Click(object sender, EventArgs e)
         {
-            if (!init() || !checkSourceTextNoError())
+            // 如果加密算法初始化失败
+            if (!init())
             {
                 return;
             }
+
+            // 待处理的文本为空
+            if ("".Equals(tbSource.Text))
+            {
+                MessageBox.Show("待处理文本为空，没有什么好处理的",
+                    "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            
             // 将明文转成全小写
             this.tbSource.Text = this.tbSource.Text.ToLower();
 
@@ -74,16 +175,24 @@ namespace CryptographyDesign
                 Clipboard.SetDataObject(tbTarget.Text);
             }
         }
-
         /// <summary>
-        /// 解密
+        /// 解密按钮点击后
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnDecrypt_Click(object sender, EventArgs e)
         {
+            // 如果加密算法初始化失败
             if (!init())
             {
+                return;
+            }
+
+            // 待处理的文本为空
+            if ("".Equals(tbSource.Text))
+            {
+                MessageBox.Show("待处理文本为空，没有什么好处理的",
+                    "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -97,31 +206,25 @@ namespace CryptographyDesign
             tbTarget.Text = myCipher.Decrypt(tbSource.Text);
         }
 
-
         /// <summary>
-        /// 检查输入的待加密的数据格式符合要求
+        /// 将密钥保存到本地按钮被点击
         /// </summary>
-        /// <returns>如果符合要求，返回true，否则返回false</returns>
-        private bool checkSourceTextNoError()
-        {
-            return false;
-        }
-
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSaveKeyToLocal_Click(object sender, EventArgs e)
         {
 
         }
+        #endregion
 
         #region 生成随机密钥
-        private readonly int maxHillKeyItem = 25;
-        private readonly int minHillKeyItem = 1;
 
-        private void btnRandomGenKey_Click(object sender, EventArgs e)
+        private void btnGenRandomKey_Click(object sender, EventArgs e)
         {
             Random random = new Random();
             // 生成维吉尼亚密码的密钥
             List<int> vigenereKm = new List<int>();
-            for (int i = 0; i < random.Next(1, 10); i++)
+            for (int i = 0; i < random.Next(3, 15); i++)
             {
                 vigenereKm.Add(random.Next(0, 25));
             }
@@ -186,7 +289,11 @@ namespace CryptographyDesign
                 for (int j = 0; j < column; j++)
                 {
                     // 两位宽度，左对齐
-                    builder.Append(matrix[i, j].ToString().PadLeft(2, '0')).Append(' '); 
+                    builder.Append(matrix[i, j].ToString().PadLeft(2, '0'));
+                    if (j != column - 1)
+                    {
+                        builder.Append(' ');
+                    }
                 }
                 builder.Append(System.Environment.NewLine);
             }
@@ -202,10 +309,36 @@ namespace CryptographyDesign
         /// 限制输入的明文和密文的格式
         /// </summary>
         private static Regex regexSourceText = new Regex("^[a-zA-Z]*$");
-        private static Regex regexHillKeyText = new Regex("[0-9]+[\\s+]");
-        private static Regex regexAffineKeyAText = new Regex("[0-9]+[\\s+]");
-        private static Regex regexAffineKeyBText = new Regex("[0-9]+[\\s+]");
-        private static Regex regexVigenereKeyText = new Regex("[0-9]+[\\s+]");
+
+        /// <summary>
+        /// 格式为：
+        ///     1.数字格式为：0 ~ 9 或 00 ~ 09 或 10 ~ 19 或 20 ~ 25
+        ///     2.每行的数字之间用一个空格分割开
+        ///     3.每行的结尾一个换行，换行符为：\n 或 \r 或 \r\n
+        /// </summary>
+        //private static Regex regexHillKeyText = new Regex("^\\s*(([0-9]|0\\d|1\\d|2[0-5]) )*([0-9]|0\\d|1\\d|2[0-5])$");
+        private static string regexSingleLineText = "(([0-9]|0\\d|1\\d|2[0-5])[ ])*([0-9]|0\\d|1\\d|2[0-5])";
+        private static Regex regexHillKeyText = new Regex("^(((([0-9]|0\\d|1\\d|2[0-5])[ ])*([0-9]|0\\d|1\\d|2[0-5]))[\\r|\\n|\\r\\n])*(([0-9]|0\\d|1\\d|2[0-5])[ ])*([0-9]|0\\d|1\\d|2[0-5])$");
+        // TODO 优先级高，限定
+
+        /// <summary>
+        /// 格式为：
+        ///    0 ~ 9 或 00 ~ 09 或 10 ~ 19 或 20 ~ 25
+        /// </summary>
+        private static Regex regexAffineKeyAText = new Regex("^[0-9]|0\\d|1\\d|2[0-5]$");
+
+        /// <summary>
+        /// 格式为：
+        ///    0 ~ 9 或 00 ~ 09 或 10 ~ 19 或 20 ~ 25
+        /// </summary>
+        private static Regex regexAffineKeyBText = new Regex("^[0-9]|0\\d|1\\d|2[0-5]$");
+
+        /// <summary>
+        /// 格式为：
+        ///     1.数字格式为：0 ~ 9 或 00 ~ 09 或 10 ~ 19 或 20 ~ 25
+        ///     2.每行的数字之间用一个空格分割开
+        /// </summary>
+        private static Regex regexVigenereKeyText = new Regex($"^{regexSingleLineText}$");
 
         private void tbSource_TextChanged(object sender, EventArgs e)
         {
@@ -213,63 +346,70 @@ namespace CryptographyDesign
             {
                 this.errorProvider1.SetError(this.tbSource,
                     $"数据格式错误，仅接收26个字母，不区分大小写，但是程序会自动全部转成小写");
-                isKeysOk = false;
+                isKeysStringOk = false;
+                return;
             }
 
             this.errorProvider1.SetError(this.tbSource, null);
-            isKeysOk = true;
+            isKeysStringOk = true;
         }
 
         private void tbHillKey_TextChanged(object sender, EventArgs e)
         {
-            if (!regexSourceText.IsMatch(this.tbHillKey.Text))
-            {
-                this.errorProvider1.SetError(this.tbSource,
-                    $"数据格式错误，矩阵为方阵，且每项为0-25的整数，中间用空格或换行隔开");
-                isKeysOk = false;
-            }
+            //if (!regexHillKeyText.IsMatch(this.tbHillKey.Text))
+            //{
+            //    this.errorProvider1.SetError(this.tbHillKey,
+            //        $"数据格式错误，矩阵为方阵，每项为0-25的整数，每行的数之间用一个空格分隔");
+            //    isKeysStringOk = false;
+            //    return;
+            //}
 
             this.errorProvider1.SetError(this.tbHillKey, null);
-            isKeysOk = true;
+            isKeysStringOk = true;
         }
 
         private void tbAffineKeyA_TextChanged(object sender, EventArgs e)
         {
-            if (!regexSourceText.IsMatch(this.tbAffineKeyA.Text))
+            if (!regexAffineKeyAText.IsMatch(this.tbAffineKeyA.Text) )
             {
-                this.errorProvider1.SetError(this.tbSource,
-                    $"数据格式错误，数据为1-25之间的整数");
-                isKeysOk = false;
+                this.errorProvider1.SetError(this.tbAffineKeyA,
+                    $"数据格式错误，数据为0-25之间的整数");
+                isKeysStringOk = false;
+                return;
             }
 
             this.errorProvider1.SetError(this.tbAffineKeyA, null);
-            isKeysOk = true;
+            isKeysStringOk = true;
         }
 
         private void tbAffineKeyB_TextChanged(object sender, EventArgs e)
         {
-            if (!regexSourceText.IsMatch(this.tbSource.Text))
+            if (!regexAffineKeyBText.IsMatch(this.tbAffineKeyB.Text))
             {
-                this.errorProvider1.SetError(this.tbSource,
-                    $"数据格式错误，仅接收26个字母，不区分大小写，但是程序会自动全部转成小写");
-                isKeysOk = false;
+                this.errorProvider1.SetError(this.tbAffineKeyB,
+                    $"数据格式错误，数据为0-25之间的整数");
+                isKeysStringOk = false;
+                return;
             }
 
-            this.errorProvider1.SetError(this.tbSource, null);
-            isKeysOk = true;
+            this.errorProvider1.SetError(this.tbAffineKeyB, null);
+            isKeysStringOk = true;
         }
 
         private void tbVigenereKey_TextChanged(object sender, EventArgs e)
         {
-            if (!regexSourceText.IsMatch(this.tbSource.Text))
+            if (!regexVigenereKeyText.IsMatch(this.tbVigenereKey.Text))
             {
-                this.errorProvider1.SetError(this.tbSource,
-                    $"数据格式错误，仅接收26个字母，不区分大小写，但是程序会自动全部转成小写");
-                isKeysOk = false;
+                this.errorProvider1.SetError(this.tbVigenereKey,
+                    $"数据格式错误，格式为：" + System.Environment.NewLine
+                    + "1.数字格式为：0 ~ 9 或 00 ~ 09 或 10 ~ 19 或 20 ~ 25" + System.Environment.NewLine
+                    + "2.每行的数字之间用一个空格分割开");
+                isKeysStringOk = false;
+                return;
             }
 
-            this.errorProvider1.SetError(this.tbSource, null);
-            isKeysOk = true;
+            this.errorProvider1.SetError(this.tbVigenereKey, null);
+            isKeysStringOk = true;
         }
 
         #endregion

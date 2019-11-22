@@ -34,20 +34,14 @@ namespace CryptographyDesign.utils
         private readonly double e = 1.0E-1;
 
         /// <summary>
-        /// 分组数据不够时填充的数据
+        /// 分组数据不够时填充的字符
         /// </summary>
-        private const char Append_Item = (char)255;
+        private const char Append_Char = (char)0;
 
         /// <summary>
-        /// 初始化
+        /// 终结符，类似于转义符号“\”，如果需要输入该符号的话，需要连续输入两个
         /// </summary>
-        /// <param name="ekey">密钥，必须是可逆的方阵</param>
-        public HillCipher(double[,] ekey)
-        {
-            this.EKEY = ekey;
-            this.DKEY = CreateMatrix.DenseOfArray(ekey).Inverse().ToArray();
-            this.groupLength = ekey.GetLength(0);   // 如果执行到这里，已经说明矩阵是方阵
-        }
+        private const char Transfer_Char = (char)25;
 
         /// <summary>
         /// 初始化
@@ -67,7 +61,9 @@ namespace CryptographyDesign.utils
             }
 
             this.EKEY = ds;
-            this.DKEY = CreateMatrix.DenseOfArray(ds).Inverse().ToArray();
+            var _ = CreateMatrix.DenseOfArray(ds);
+            this.DKEY = (_.Inverse() * _.Determinant()).ToArray();
+            this.DKEY = SolveDouble(this.DKEY);
             this.groupLength = ekey.GetLength(0);   // 如果执行到这里，已经说明矩阵是方阵
         }
 
@@ -78,12 +74,33 @@ namespace CryptographyDesign.utils
                 throw new FormatException("密文的格式出错，请检查是否缺失数据");
             }
 
+            // 解密
             int groupNums = cipher.Count / groupLength;   // 总分组数
             List<char> result = new List<char>();   // 结果
             for (int i = 0; i < groupNums; i++)
             {
                 // 使用加密矩阵将分组解密，然后添加到结果中
-                result.AddRange(MultiplyMod26(cipher.GetRange(i, groupLength).ToArray(), DKEY));
+                result.AddRange(MultiplyMod26(cipher.GetRange(i * groupLength, groupLength).ToArray(), DKEY));
+            }
+
+            // 去冗余，去除终结符之后的数据
+            var index = result.LastIndexOf(Transfer_Char);
+            if(index == -1)
+            {
+                //throw new Exception("数据出错，或者数据和希尔密码的密钥不匹配");
+            }
+            result.RemoveRange(index, result.Count - index);
+
+            // 合并连续的两个终结符
+            for (int i = 1; i < result.Count; i++)
+            {
+                if(result[i] == Transfer_Char)
+                {
+                    if (result[i - 1] == Transfer_Char)
+                    {
+                        result.RemoveAt(i);
+                    }
+                }
             }
 
             return result;
@@ -91,20 +108,45 @@ namespace CryptographyDesign.utils
 
         public List<char> Encrypt(List<char> plain)
         {
-            // 检查数据总长度，如果最后一组数量不够，需要填充数据
-            int appendLength = groupLength - (plain.Count % groupLength);  // 填充数
-            for (int i = 0; i < appendLength; i++)
+            // 拷贝plain
+            var copy = new List<char>();
+            for (int i = 0; i < plain.Count; i++)
             {
-                plain.Add(Append_Item);
+                copy.Add(plain[i]);
             }
 
-            int groupNums = plain.Count / groupLength + plain.Count % groupLength == 0 ? 0 : 1;   // 总分组数
+            // 将终结符转义，即将一个终结符换成两个连续的终结符
+            for (int i = 0; i < copy.Count; i++)
+            {
+                if(copy[i] == Transfer_Char)
+                {
+                    copy.Insert(i, Transfer_Char);
+                    i++;
+                }
+            }
+
+            // 在数据的最后加上终结符
+            copy.Add(Transfer_Char);
+
+            // 检查数据总长度，如果最后一组数量不够，需要填充数据
+            int appendLength = copy.Count % groupLength;// 填充数
+            if(appendLength != 0)
+            {
+                appendLength = groupLength - appendLength;
+            }
+
+            for (int i = 0; i < appendLength; i++)
+            {
+                copy.Add(Append_Char);
+            }
+
+            int groupNums = copy.Count / groupLength + ((copy.Count % groupLength) == 0 ? 0 : 1);   // 总分组数
 
             List<char> result = new List<char>();   // 结果
             for (int i = 0; i < groupNums; i++)
             {
                 // 使用加密矩阵将分组加密，然后添加到结果中
-                result.AddRange(MultiplyMod26(plain.GetRange(i, groupLength).ToArray(), EKEY));
+                result.AddRange(MultiplyMod26(copy.GetRange(i * groupLength, groupLength).ToArray(), EKEY));
             }
 
             return result;
@@ -132,37 +174,48 @@ namespace CryptographyDesign.utils
                 {
                     temp += vector[j] * matrix[j,i];
                 }
-                if (temp - (int)temp > e)
-                {
-                    throw new FormatException("无法解决浮点数陷阱");
-                }
-                result[i] = (char)(((int)(temp + 0.5)) % 26); 
+
+                // 精确化
+                temp = (int)(temp + e);
+
+                result[i] = (char)(((int)temp) % 26); 
             }
 
             return result;
         }
 
         /// <summary>
-        /// 获取指定组的数据
+        /// 将 double 转成整数，并且mod 26
         /// </summary>
-        /// <param name="index">下标</param>
-        /// <param name="count">长度</param>
-        /// <param name="data">数据源</param>
+        /// <param name="matrix"></param>
         /// <returns></returns>
-        private char[] GetRange(int index, int count, char[] data)
+        private double[,] SolveDouble(double[,] matrix)
         {
-            if (index < 0 || count < 0 || data.Length - index < count)
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                throw new ArgumentOutOfRangeException("获取子数组越界");
-            }
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    // 精确化
+                    if (matrix[i, j] > 0)
+                    {
+                        matrix[i, j] = (int)(matrix[i, j] + e);
+                    }
+                    else
+                    {
+                        matrix[i, j] = (int)(matrix[i, j] - e);
+                    }
 
-            var result = new char[count];
-            for (int i = 0; i < count; i++)
-            {
-                result[i] = data[index + i];
-            }
+                    // 求余
+                    matrix[i, j] %= 26;
 
-            return result;
+                    // 余数转正数
+                    if(matrix[i, j] < 0)
+                    {
+                        matrix[i, j] += 26;
+                    }
+                }
+            }
+            return matrix;
         }
     }
 

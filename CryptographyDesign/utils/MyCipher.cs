@@ -6,46 +6,88 @@ using System.Threading.Tasks;
 
 namespace CryptographyDesign.utils
 {
-    class MyCipher : ICipher<string, string>
+    public class MyCipher : ICipher<string, string>
     {
-        private int[][] key1;
+        /// <summary>
+        /// 符号集
+        /// </summary>
+        private readonly char[] Characters = new char[]
+               {
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+                'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 
+                's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+               };
 
-        private int[] key2;
+        private VigenereCipher vigenereCipher;
+
+        private AffineCipher affineCipher;
 
         private HillCipher hillCipher;
 
-        public MyCipher(int[][] key)
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="vigenereKey">维吉尼亚密码密钥</param>
+        /// <param name="affineKeyA">仿射密码密钥a</param>
+        /// <param name="affineKeyB">仿射密码密钥b</param>
+        /// <param name="hillMatrix">希尔密码加密矩阵</param>
+        public MyCipher(int[] vigenereKey, int affineKeyA, int affineKeyB, int[,] hillMatrix)
         {
-            //this.hillCipher = new HillCipher(key);
+            this.vigenereCipher = new VigenereCipher(vigenereKey);
+            this.affineCipher = new AffineCipher(affineKeyA, affineKeyB);
+            this.hillCipher = new HillCipher(hillMatrix);
         }
 
         public string Decrypt(string cipher)
         {
-            //// 先使用移位算法，再用仿射密码，再用希尔密码
-            //var bytes = Convert.FromBase64String(cipher);
+            var data = cipher.ToList();
+            for (int i = 0; i < data.Count; i++)
+            {
+                data[i] -= 'a';
+            }
 
-            //var  s = Encoding.UTF8.GetString(bytes);
+            var hill = this.hillCipher.Decrypt(data);
 
-            //return hillCipher.Decrypt(b);
-            return null;
+            var affine = this.affineCipher.Decrypt(hill);
+
+            var vigenere = this.vigenereCipher.Decrypt(affine);
+
+            StringBuilder builder = new StringBuilder();
+
+            // 将List<char> 转成string
+            for (int i = 0; i < vigenere.Count; i++)
+            {
+                builder.Append(Characters[vigenere[i]]);
+            }
+
+            return builder.ToString();
         }
 
         public string Encrypt(string plain)
         {
-            //var a = hillCipher.Encrypt(plain);
-            //var b = wigenereCipher.Encrypt(a);
+            var data = plain.ToList();
+            for (int i = 0; i < data.Count; i++)
+            {
+                data[i] -= 'a';
+            }
 
-            //// 将List<char> 转成string
-            //StringBuilder builder = new StringBuilder();
-            //for (int i = 0; i < b.Count; i++)
-            //{
-            //    builder.Append(b[i]);
-            //}
+            //// 先使用维吉尼亚，再用仿射密码，再用希尔密码
 
-            //var bytes = Encoding.UTF8.GetBytes(builder.ToString());
+            var vigenere = this.vigenereCipher.Encrypt(data);
 
-            //return Convert.ToBase64String(bytes);
-            return null;
+            var affine = this.affineCipher.Encrypt(vigenere);
+
+            var hill = this.hillCipher.Encrypt(affine);
+
+            StringBuilder builder = new StringBuilder();
+
+            // 将List<char> 转成string
+            for (int i = 0; i < hill.Count; i++)
+            {
+                builder.Append(Characters[hill[i]]);
+            }
+
+            return builder.ToString();
         }
     }
 }

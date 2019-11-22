@@ -8,14 +8,21 @@ namespace CryptographyDesign.utils
 {
     public class VigenereCipher : ICipher<List<char>, List<char>>
     {
+        private int[] vigenereKey;
+
+        public VigenereCipher(int[] vigenereKey)
+        {
+            this.vigenereKey = vigenereKey;
+        }
+
         public List<char> Decrypt(List<char> cipher)
         {
-            throw new NotImplementedException();
+            return cipher;
         }
 
         public List<char> Encrypt(List<char> plain)
         {
-            throw new NotImplementedException();
+            return plain;
         }
     }
 }
