@@ -2,6 +2,7 @@
 using MathNet.Numerics.LinearAlgebra.Double;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,14 +17,12 @@ namespace CryptographyDesign.utils
         /// <summary>
         /// 加密密钥
         /// </summary>
-        private readonly double[,] EKEY;
+        private readonly MatrixIntGF26 EKEY;
 
         /// <summary>
         /// 解密密钥
         /// </summary>
-        private readonly double[,] DKEY;
-
-        private readonly double Determinant;
+        private readonly MatrixIntGF26 DKEY;
 
         /// <summary>
         /// 分组长度
@@ -51,22 +50,12 @@ namespace CryptographyDesign.utils
         /// <param name="ekey">密钥，必须是可逆的方阵</param>
         public HillCipher(int[,] ekey)
         {
-            var row = ekey.GetLength(0);
-            var column = ekey.GetLength(1);
-            var ds = new double[row, column];
-            for (int i = 0; i < row; i++)
+            this.EKEY = new MatrixIntGF26(ekey);
+            if (!this.EKEY.HasInverse())
             {
-                for (int j = 0; j < column; j++)
-                {
-                    ds[i, j] = ekey[i, j];
-                }
+                throw new Exception("加密矩阵无法在有限域内求得逆矩阵");
             }
-
-            this.EKEY = ds;
-            var _ = CreateMatrix.DenseOfArray(ds);
-            this.Determinant = _.Determinant();
-            this.DKEY = (_.Inverse() * Determinant).ToArray();
-            this.DKEY = SolveDouble(this.DKEY);
+            this.DKEY = EKEY.Inverse();
             this.groupLength = ekey.GetLength(0);   // 如果执行到这里，已经说明矩阵是方阵
         }
 
@@ -81,19 +70,11 @@ namespace CryptographyDesign.utils
             int groupNums = cipher.Count / groupLength;   // 总分组数
             List<char> result = new List<char>();   // 结果
 
-            // TODO delte 
-            var delete = CreateMatrix.DenseOfArray(DKEY) * CreateMatrix.DenseOfArray(EKEY);
-            delete %= 26;
-
             for (int i = 0; i < groupNums; i++)
             {
                 // 使用加密矩阵将分组解密，然后添加到结果中
-                result.AddRange(MultiplyMod26Pro(cipher.GetRange(i * groupLength, groupLength).ToArray(), DKEY));
+                result.AddRange(MatrixIntGF26.MultiplyMod26(cipher.GetRange(i * groupLength, groupLength).ToArray(), DKEY));
             }
-
-            // TODO delte 
-            delete = CreateMatrix.DenseOfArray(DKEY) * CreateMatrix.DenseOfArray(EKEY);
-            delete %= 26;
 
             // 去冗余，去除终结符之后的数据
             var index = result.LastIndexOf(Transfer_Char);
@@ -118,36 +99,11 @@ namespace CryptographyDesign.utils
             return result;
         }
 
-        private char[] MultiplyMod26Pro(char[] vector, double[,] matrix)
-        {
-            if (vector.Length != matrix.GetLength(0))
-            {
-                throw new Exception("无法进行乘法运算，向量的维度和矩阵的行数不相等");
-            }
-            var result = new char[vector.Length];
-
-            double temp;
-            for (int i = 0; i < result.Length; i++)
-            {
-                temp = 0;
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    temp += vector[j] * matrix[j, i];
-                }
-
-                temp /= Determinant;
-
-                // 精确化
-                temp = (int)(temp + e);
-
-                result[i] = (char)(((int)temp) % 26);
-            }
-
-            return result;
-        }
-
         public List<char> Encrypt(List<char> plain)
         {
+            // TODO delete 
+
+
             // 拷贝plain
             var copy = new List<char>();
             for (int i = 0; i < plain.Count; i++)
@@ -186,77 +142,33 @@ namespace CryptographyDesign.utils
             for (int i = 0; i < groupNums; i++)
             {
                 // 使用加密矩阵将分组加密，然后添加到结果中
-                result.AddRange(MultiplyMod26(copy.GetRange(i * groupLength, groupLength).ToArray(), EKEY));
+                result.AddRange(MatrixIntGF26.MultiplyMod26(copy.GetRange(i * groupLength, groupLength).ToArray(), EKEY));
             }
 
             return result;
         }
 
-        /// <summary>
-        /// 计算向量和矩阵的模26乘积，同时根据精度，对结果进行修正
-        /// </summary>
-        /// <param name="vector">向量</param>
-        /// <param name="matrix">矩阵</param>
-        /// <returns>乘积</returns>
-        private char[] MultiplyMod26(char[] vector, double[,] matrix)
+        void print(List<char> a)
         {
-            if (vector.Length != matrix.GetLength(0))
+            for (int i = 0; i < a.Count; i++)
             {
-                throw new Exception("无法进行乘法运算，向量的维度和矩阵的行数不相等");
+
             }
-            var result = new char[vector.Length];
-
-            double temp;
-            for (int i = 0; i < result.Length; i++)
-            {
-                temp = 0;
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    temp += vector[j] * matrix[j,i];
-                }
-
-                // 精确化
-                temp = (int)(temp + e);
-
-                result[i] = (char)(((int)temp) % 26); 
-            }
-
-            return result;
         }
 
-        /// <summary>
-        /// 将 double 转成整数，并且mod 26
-        /// </summary>
-        /// <param name="matrix"></param>
-        /// <returns></returns>
-        private double[,] SolveDouble(double[,] matrix)
+        string NumListToString(List<char> list)
         {
-            for (int i = 0; i < matrix.GetLength(0); i++)
+            StringBuilder builder = new StringBuilder();
+
+            // 将List<char> 转成string
+            for (int i = 0; i < list.Count; i++)
             {
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    // 精确化
-                    if (matrix[i, j] > 0)
-                    {
-                        matrix[i, j] = (int)(matrix[i, j] + e);
-                    }
-                    else
-                    {
-                        matrix[i, j] = (int)(matrix[i, j] - e);
-                    }
-
-                    // 求余
-                    matrix[i, j] %= 26;
-
-                    // 余数转正数
-                    if(matrix[i, j] < 0)
-                    {
-                        matrix[i, j] += 26;
-                    }
-                }
+                builder.Append((char)('a' + i));
             }
-            return matrix;
+
+            return builder.ToString();
         }
+
     }
 
 }

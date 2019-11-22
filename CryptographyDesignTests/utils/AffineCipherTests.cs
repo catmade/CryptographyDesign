@@ -19,7 +19,7 @@ namespace CryptographyDesign.utils.Tests
             int time = 100;
             for (int i = 0; i < time; i++)
             {
-                var _ = RandomHelper.GetPlain();
+                var _ = RandomHelper.GetCharList();
                 int a = RandomHelper.GetAffineKeyA();
                 int b = RandomHelper.GetAffineKeyB();
                 var affine = new AffineCipher(a, b);

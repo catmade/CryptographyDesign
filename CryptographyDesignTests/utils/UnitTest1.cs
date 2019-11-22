@@ -22,33 +22,38 @@ namespace CryptographyDesign.utils.Tests
             string newLine = "(\r|\n|\r\n)";
             //Regex regex = new Regex($"^(({line}{newLine})*({line}))$");
             // regex.Matches(s);
+
         }
 
         [Test()]
         public void TestList()
         {
-            //for (int m = 0; m < 3; m++)
-            //{
-            //    List<int> list = new List<int>();
-            //    list.Add(0);
-            //    list.Add(1);
-            //    list.Add(2);
-            //    list.Add(3);
-            //    list.Add(1);
-            //    list.Add(1);
-            //    list.Add(9);
-            //    list.Add(1);
-            //    list.Add(1);
-            //    list.Add(1);
-            //    list.Add(1);
-            //    for (int i = 1; i < list.Count; i++)
-            //    {
-            //        if (list[i] == 1 && list[i - 1] == 1)
-            //        {
-            //            list.RemoveAt(i);
-            //        }
-            //    }
-            //}
+            for (int m = 0; m < 3; m++)
+            {
+                List<int> list = new List<int>();
+                list.Add(0);
+                list.Add(1);
+                list.Add(2);
+                list.Add(3);
+                list.Add(1);
+                list.Add(1);
+                list.Add(9);
+                list.Add(1);
+                list.Add(1);
+                list.Add(1);
+                list.Add(1);
+
+                Debug.WriteLine(list);
+                Debug.WriteLine(list.ToArray());
+
+                //for (int i = 1; i < list.Count; i++)
+                //{
+                //    if (list[i] == 1 && list[i - 1] == 1)
+                //    {
+                //        list.RemoveAt(i);
+                //    }
+                //}
+            }
         }
     }
 }

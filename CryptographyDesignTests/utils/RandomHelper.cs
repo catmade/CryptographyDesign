@@ -1,4 +1,5 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using CryptographyDesign.utils;
+using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace CryptographyDesignTests.utils
         /// 获得随机明文
         /// </summary>
         /// <returns></returns>
-        public static List<char> GetPlain()
+        public static List<char> GetCharList()
         {
             int maxGroupNum = 100;    // 明文最大长度
             int minGroupNum = 1;      // 明文最小长度
@@ -57,7 +58,7 @@ namespace CryptographyDesignTests.utils
             int length = random.Next(minGroupNum, maxGroupNum) * 2;
             for (int j = 0; j < length; j++)
             {
-                builder.Append((char)random.Next(0, 25));
+                builder.Append((char)random.Next('a', 'z'));
             }
 
             return builder.ToString();
@@ -72,14 +73,14 @@ namespace CryptographyDesignTests.utils
         public static int GetAffineKeyB()
         {
             Random random = new Random();
-            return random.Next(0, 25);
+            return random.Next(-25, 25);
         }
 
         public static int[,] GetHillMatrix()
         {
             Random random = new Random();
             int rank = random.Next(5, 10); // 矩阵的阶数
-            double[,] vs = new double[rank, rank];
+            int[,] vs = new int[rank, rank];
             while (true)
             {
                 for (int i = 0; i < rank; i++)
@@ -89,23 +90,13 @@ namespace CryptographyDesignTests.utils
                         vs[i, j] = random.Next(1, 25);
                     }
                 }
-                // 如果矩阵行列式不为 0, 说明有逆矩阵，则跳出循环
-                if (CreateMatrix.DenseOfArray(vs).Determinant() != 0)
+                if (new MatrixIntGF26(vs).HasInverse())
                 {
                     break;
                 }
             }
 
-            int[,] result = new int[vs.GetLength(0),vs.GetLength(1)];
-            for (int i = 0; i < vs.GetLength(0); i++)
-            {
-                for (int j = 0; j < vs.GetLength(1); j++)
-                {
-                    result[i, j] = (int)vs[i, j];
-                }
-            }
-
-            return result;
+            return vs;
         }
 
         

@@ -31,7 +31,7 @@ namespace CryptographyDesign.utils
             int ap = AAP[a]; // a的逆元
             for (int i = 0; i < cipher.Count; i++)
             {
-                cipher[i] = (char)((ap * (cipher[i] - b) + 26) % 26);
+                cipher[i] = (char)(((ap * (cipher[i] - b)) % 26 + 26) % 26);
             }
             return cipher;
         }
@@ -40,7 +40,7 @@ namespace CryptographyDesign.utils
         {
             for (int i = 0; i < plain.Count; i++)
             {
-                plain[i] = (char)(((a * plain[i]) + b + 26) % 26);
+                plain[i] = (char)(((a * plain[i] + b) % 26 + 26) % 26);
             }
             return plain;
         }

@@ -44,7 +44,7 @@ namespace CryptographyDesign.utils.Tests
 
         private void GetRandomKeys(out int[] vigenereKey, out int affineKeyA, out int affineKeyB, out int[,] hillMatrix)
         {
-            vigenereKey = null;
+            vigenereKey = RandomHelper.GetVigenereKey();
 
             affineKeyA = RandomHelper.GetAffineKeyA();
             affineKeyB = RandomHelper.GetAffineKeyB();

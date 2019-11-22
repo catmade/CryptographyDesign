@@ -40,36 +40,21 @@ namespace CryptographyDesign.utils
 
         public string Decrypt(string cipher)
         {
-            var data = cipher.ToList();
-            for (int i = 0; i < data.Count; i++)
-            {
-                data[i] -= 'a';
-            }
+            var data = StringToNumList(cipher);
 
-            var hill = this.hillCipher.Decrypt(data);
+            ///var hill = this.hillCipher.Decrypt(data);
+            var hill = data;
 
             var affine = this.affineCipher.Decrypt(hill);
 
             var vigenere = this.vigenereCipher.Decrypt(affine);
 
-            StringBuilder builder = new StringBuilder();
-
-            // 将List<char> 转成string
-            for (int i = 0; i < vigenere.Count; i++)
-            {
-                builder.Append(Characters[vigenere[i]]);
-            }
-
-            return builder.ToString();
+            return NumListToString(vigenere);
         }
 
         public string Encrypt(string plain)
         {
-            var data = plain.ToList();
-            for (int i = 0; i < data.Count; i++)
-            {
-                data[i] -= 'a';
-            }
+            var data = StringToNumList(plain);
 
             //// 先使用维吉尼亚，再用仿射密码，再用希尔密码
 
@@ -77,14 +62,30 @@ namespace CryptographyDesign.utils
 
             var affine = this.affineCipher.Encrypt(vigenere);
 
-            var hill = this.hillCipher.Encrypt(affine);
+            ///var hill = this.hillCipher.Encrypt(affine);
+            var hill = affine;
 
+            return NumListToString(hill);
+        }
+
+        private List<char> StringToNumList(string s)
+        {
+            var data = s.ToList();
+            for (int i = 0; i < data.Count; i++)
+            {
+                data[i] -= 'a';
+            }
+            return data;
+        }
+
+        private string NumListToString(List<char> list)
+        {
             StringBuilder builder = new StringBuilder();
 
             // 将List<char> 转成string
-            for (int i = 0; i < hill.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
-                builder.Append(Characters[hill[i]]);
+                builder.Append(Characters[list[i]]);
             }
 
             return builder.ToString();

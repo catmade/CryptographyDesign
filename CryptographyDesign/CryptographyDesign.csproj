@@ -56,9 +56,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataConfig.cs" />
     <Compile Include="utils\AffineCipher.cs" />
-    <Compile Include="utils\MatrixInt.cs" />
+    <Compile Include="utils\MatrixIntGF26.cs" />
     <Compile Include="utils\HillCipher.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

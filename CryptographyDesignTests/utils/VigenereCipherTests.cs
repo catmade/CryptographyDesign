@@ -18,7 +18,7 @@ namespace CryptographyDesign.utils.Tests
             int time = 100;
             for (int i = 0; i < time; i++)
             {
-                var plain = RandomHelper.GetPlain();
+                var plain = RandomHelper.GetCharList();
                 var vigenere = new VigenereCipher(RandomHelper.GetVigenereKey());
                 Assert.AreEqual(plain, vigenere.Decrypt(vigenere.Encrypt(plain)));
             }
