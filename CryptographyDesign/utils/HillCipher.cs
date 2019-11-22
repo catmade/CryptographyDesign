@@ -23,6 +23,8 @@ namespace CryptographyDesign.utils
         /// </summary>
         private readonly double[,] DKEY;
 
+        private readonly double Determinant;
+
         /// <summary>
         /// 分组长度
         /// </summary>
@@ -62,7 +64,8 @@ namespace CryptographyDesign.utils
 
             this.EKEY = ds;
             var _ = CreateMatrix.DenseOfArray(ds);
-            this.DKEY = (_.Inverse() * _.Determinant()).ToArray();
+            this.Determinant = _.Determinant();
+            this.DKEY = (_.Inverse() * Determinant).ToArray();
             this.DKEY = SolveDouble(this.DKEY);
             this.groupLength = ekey.GetLength(0);   // 如果执行到这里，已经说明矩阵是方阵
         }
@@ -77,11 +80,20 @@ namespace CryptographyDesign.utils
             // 解密
             int groupNums = cipher.Count / groupLength;   // 总分组数
             List<char> result = new List<char>();   // 结果
+
+            // TODO delte 
+            var delete = CreateMatrix.DenseOfArray(DKEY) * CreateMatrix.DenseOfArray(EKEY);
+            delete %= 26;
+
             for (int i = 0; i < groupNums; i++)
             {
                 // 使用加密矩阵将分组解密，然后添加到结果中
-                result.AddRange(MultiplyMod26(cipher.GetRange(i * groupLength, groupLength).ToArray(), DKEY));
+                result.AddRange(MultiplyMod26Pro(cipher.GetRange(i * groupLength, groupLength).ToArray(), DKEY));
             }
+
+            // TODO delte 
+            delete = CreateMatrix.DenseOfArray(DKEY) * CreateMatrix.DenseOfArray(EKEY);
+            delete %= 26;
 
             // 去冗余，去除终结符之后的数据
             var index = result.LastIndexOf(Transfer_Char);
@@ -101,6 +113,34 @@ namespace CryptographyDesign.utils
                         result.RemoveAt(i);
                     }
                 }
+            }
+
+            return result;
+        }
+
+        private char[] MultiplyMod26Pro(char[] vector, double[,] matrix)
+        {
+            if (vector.Length != matrix.GetLength(0))
+            {
+                throw new Exception("无法进行乘法运算，向量的维度和矩阵的行数不相等");
+            }
+            var result = new char[vector.Length];
+
+            double temp;
+            for (int i = 0; i < result.Length; i++)
+            {
+                temp = 0;
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    temp += vector[j] * matrix[j, i];
+                }
+
+                temp /= Determinant;
+
+                // 精确化
+                temp = (int)(temp + e);
+
+                result[i] = (char)(((int)temp) % 26);
             }
 
             return result;
