@@ -33,6 +33,18 @@ namespace CryptographyDesignTests.utils
             return result;
         }
 
+        public static int[] GetVigenereKey()
+        {
+            Random random = new Random();
+            int[] vigenereKm = new int[random.Next(3, 15)];
+            for (int i = 0; i < vigenereKm.Length; i++)
+            {
+                vigenereKm[i] = random.Next(0, 25);
+            }
+
+            return vigenereKm;
+        }
+
         public static string GetString()
         {
             int maxGroupNum = 100;    // 明文最大长度
