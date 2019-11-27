@@ -163,7 +163,16 @@ namespace CryptographyDesign
             // 将明文转成全小写
             this.tbSource.Text = this.tbSource.Text.ToLower();
 
-            tbTarget.Text = myCipher.Encrypt(tbSource.Text);
+            try
+            {
+                tbTarget.Text = myCipher.Encrypt(tbSource.Text);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show($"加密信息的过程中出错了，错误信息：{exc.Message}",
+                    "出错了", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             if (ckbCopyToClipBoard.Checked)
             {
                 Clipboard.SetDataObject(tbTarget.Text);
@@ -207,7 +216,15 @@ namespace CryptographyDesign
                     }
                 }
             }
-            tbTarget.Text = myCipher.Decrypt(tbSource.Text);
+            try
+            {
+                tbTarget.Text = myCipher.Decrypt(tbSource.Text);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show($"解密信息的过程中出错了，错误信息：{exc.Message}",
+                    "出错了", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
@@ -430,5 +447,9 @@ namespace CryptographyDesign
 
         #endregion
 
+        private void ckbPasteFromClipBoard_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
