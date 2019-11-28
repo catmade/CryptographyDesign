@@ -14,10 +14,10 @@ namespace CryptographyDesign.utils
 
         public AffineCipher(int a, int b)
         {
-            if (!IsKeyASuitable(a))
+            string message;
+            if (!IsKeyASuitable(a, out message))
             {
-                throw new Exception("仿射密码的参数a必须要与26互素数，必须为以下值中的一个：\n" +
-                    "1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25");
+                throw new Exception(message);
             }
             this.a = a;
             this.b = b;
@@ -98,10 +98,14 @@ namespace CryptographyDesign.utils
         /// 判断系数 a 是否符合要求
         /// </summary>
         /// <param name="a"></param>
+        /// <param name="message">如果不符合，返回错误信息</param>
         /// <returns></returns>
-        public static bool IsKeyASuitable(int a)
+        public static bool IsKeyASuitable(int a, out string message)
         {
-            return AA.Contains(a);
+            bool result = AA.Contains(a);
+            message = "仿射密码的参数a必须要与26互素数，必须为以下值中的一个：\n" +
+                    "1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25";
+            return result;
         }
     }
 }

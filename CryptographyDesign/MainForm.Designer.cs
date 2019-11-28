@@ -66,11 +66,14 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.notifyMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // notify
@@ -208,7 +211,7 @@
             this.helpProvider1.SetShowHelp(this.tbVigenereKey, true);
             this.tbVigenereKey.Size = new System.Drawing.Size(306, 24);
             this.tbVigenereKey.TabIndex = 1;
-            this.tbVigenereKey.TextChanged += new System.EventHandler(this.tbVigenereKey_TextChanged);
+            this.tbVigenereKey.TextChanged += new System.EventHandler(this.TbVigenereKey_TextChanged);
             // 
             // label1
             // 
@@ -234,7 +237,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(96, 183);
+            this.label9.Location = new System.Drawing.Point(114, 183);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(70, 14);
             this.label9.TabIndex = 19;
@@ -258,7 +261,7 @@
             this.btnExportKeys.Name = "btnExportKeys";
             this.btnExportKeys.Size = new System.Drawing.Size(100, 32);
             this.btnExportKeys.TabIndex = 6;
-            this.btnExportKeys.Text = "保存密钥";
+            this.btnExportKeys.Text = "导出密钥";
             this.btnExportKeys.UseVisualStyleBackColor = false;
             this.btnExportKeys.Click += new System.EventHandler(this.btnExportKeys_Click);
             // 
@@ -317,7 +320,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(77, 100);
+            this.label4.Location = new System.Drawing.Point(114, 101);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(161, 14);
             this.label4.TabIndex = 13;
@@ -400,6 +403,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.pictureBox1);
             this.tabPage1.Controls.Add(this.label10);
             this.tabPage1.Controls.Add(this.label9);
             this.tabPage1.Controls.Add(this.tbVigenereKey);
@@ -444,6 +448,21 @@
             this.tabPage2.Text = "2.加解密";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.Filter = "json文件(*.json)|*.json|所有文件(*.*)|*.*";
+            this.openFileDialog1.Title = "选择密钥文件";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(480, 6);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(304, 404);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 21;
+            this.pictureBox1.TabStop = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -462,6 +481,7 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -504,6 +524,8 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

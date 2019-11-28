@@ -36,6 +36,15 @@ namespace CryptographyDesign.utils
             this.hillCipher = new HillCipher(hillMatrix);
         }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="keys"></param>
+        public MyCipher(MyCipherKeys keys) : this(keys.VigenereKey, keys.AffineKeyA, keys.AffineKeyB, keys.HillMatrix)
+        {
+
+        }
+
         public string Decrypt(string cipher)
         {
             var data = StringToNumList(cipher);
