@@ -50,15 +50,15 @@ namespace CryptographyDesign.utils
             this.groupLength = ekey.GetLength(0);   // 如果执行到这里，已经说明矩阵是方阵
 
             // TODO Delete
-            Debug.WriteLine($"{EKEY.ToString()}{System.Environment.NewLine}" +
-                $"x{System.Environment.NewLine}{DKEY.ToString()}{System.Environment.NewLine}" +
-                $"={System.Environment.NewLine}{EKEY.MultifyMod(DKEY)}");
+            //Debug.WriteLine($"{EKEY.ToString()}{System.Environment.NewLine}" +
+            //    $"x{System.Environment.NewLine}{DKEY.ToString()}{System.Environment.NewLine}" +
+            //    $"={System.Environment.NewLine}{EKEY.MultifyMod(DKEY)}");
         }
 
         public List<char> Decrypt(List<char> cipher)
         {
             // TODO Delete
-            PrintList(cipher, "[解密前]");
+            //PrintList(cipher, "[解密前]");
 
             if (cipher.Count % groupLength != 0)
             {
@@ -76,7 +76,7 @@ namespace CryptographyDesign.utils
             }
 
             // TODO Delete
-            PrintList(result, "[解密后]");
+            //PrintList(result, "[解密后]");
 
             // 去冗余，去除终结符之后的数据
             var index = result.LastIndexOf(Transfer_Char);
@@ -137,7 +137,7 @@ namespace CryptographyDesign.utils
             }
 
             // TODO Delete
-            PrintList(copy, "[加密前]");
+            //PrintList(copy, "[加密前]");
 
             int groupNums = copy.Count / groupLength + ((copy.Count % groupLength) == 0 ? 0 : 1);   // 总分组数
 
@@ -149,39 +149,39 @@ namespace CryptographyDesign.utils
             }
 
             // TODO Delete
-            PrintList(result, "[加密后]");
+            //PrintList(result, "[加密后]");
 
             return result;
         }
 
         // TODO Delete
-        void PrintList(List<char> a, string title)
-        {
-            Debug.WriteLine(title);
-            Debug.Write("字符序号：");
-            for (int i = 0; i < a.Count; i++)
-            {
-                Debug.Write(((int)a[i]).ToString().PadLeft(2, '0'));
-                Debug.Write(" ");
-            }
-            Debug.Write("\n字符序列：");
-            Debug.WriteLine(NumListToString(a));
-            Debug.WriteLine("");
-        }
+        //void PrintList(List<char> a, string title)
+        //{
+        //    Debug.WriteLine(title);
+        //    Debug.Write("字符序号：");
+        //    for (int i = 0; i < a.Count; i++)
+        //    {
+        //        Debug.Write(((int)a[i]).ToString().PadLeft(2, '0'));
+        //        Debug.Write(" ");
+        //    }
+        //    Debug.Write("\n字符序列：");
+        //    Debug.WriteLine(NumListToString(a));
+        //    Debug.WriteLine("");
+        //}
 
         // TODO Delete
-        string NumListToString(List<char> list)
-        {
-            StringBuilder builder = new StringBuilder();
+        //string NumListToString(List<char> list)
+        //{
+        //    StringBuilder builder = new StringBuilder();
 
-            // 将List<char> 转成string
-            for (int i = 0; i < list.Count; i++)
-            {
-                builder.Append((char)('a' + list[i]));
-            }
+        //    // 将List<char> 转成string
+        //    for (int i = 0; i < list.Count; i++)
+        //    {
+        //        builder.Append((char)('a' + list[i]));
+        //    }
 
-            return builder.ToString();
-        }
+        //    return builder.ToString();
+        //}
 
     }
 

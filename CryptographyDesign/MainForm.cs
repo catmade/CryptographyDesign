@@ -144,9 +144,15 @@ namespace CryptographyDesign
             myCipher = new MyCipher(myCipherKeys);
 
             // 判断源文本是否符合要求
+            if (!isSourceStringOk)
+            {
+                MessageBox.Show("待处理文本必须是26个字母",
+                    "出错了", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             if (!isSourceStringOk || "".Equals(tbSource.Text))
             {
-                MessageBox.Show("请检查【明文/密文】输入框中的待处理文本是否符合要求",
+                MessageBox.Show("待处理文本为空，请输入内容",
                     "出错了", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -188,9 +194,15 @@ namespace CryptographyDesign
             myCipher = new MyCipher(myCipherKeys);
 
             // 判断源文本是否符合要求
+            if (!isSourceStringOk)
+            {
+                MessageBox.Show("待处理文本必须是26个字母",
+                    "出错了", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             if (!isSourceStringOk || "".Equals(tbSource.Text))
             {
-                MessageBox.Show("请检查【明文/密文】输入框中的待处理文本是否符合要求",
+                MessageBox.Show("待处理文本为空，请输入内容",
                     "出错了", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -237,7 +249,7 @@ namespace CryptographyDesign
             }
 
             var s = JsonConvert.SerializeObject(myCipherKeys, Formatting.Indented);
-            string fileName = DateTime.Now.ToString("yyyyMMddhhmmss") + ".json";
+            string fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".json";
             //string fileName = DateTime.Now.ToString("'yyyy-MM-dd-hh:mm:ss'") + ".json";
             string path = Path.Combine(Environment.CurrentDirectory, @fileName);
 

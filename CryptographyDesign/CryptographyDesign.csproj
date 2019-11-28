@@ -136,7 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="locked_with_key_32px_1215152_easyicon.net.ico" />
-    <None Include="Resources\Image1.bmp" />
+    <None Include="Resources\加密方式图解.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

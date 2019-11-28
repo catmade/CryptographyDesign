@@ -203,50 +203,6 @@
   <metadata name="errorProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>351, 14</value>
   </metadata>
-  <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAAQ8AAAFDCAYAAAAktYspAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        EgAACxIB0t1+/AAACOlJREFUeF7t1z+uXtUZxeFb0NDgFJQu3RuJgoLCmYkzhMwADyUzuQwgBSVFCsr0
-        GYDzrvwhctgczAKf11d6HulnS9+u2GdrAQ9v3759eP78+fcvXrz4QZJ+roeHhy+yF//t33/MX4+Pj5J0
-        7OXLlxmKPx7HA+DnvHr1yngAv57xACrGA6gYD6BiPICK8QAqxgOoGA+gYjyAivEAKsYDqBgPoGI8gIrx
-        ACrGA6gYD6BiPICK8QAqxgOoGA+gYjyAivEAKsYDqBgPoGI8gIrxACrGA6gYD6BiPICK8QAqxgOoGA+g
-        YjyAivEAKsYDqBgPoGI8gIrxACrGA6gYD6BiPICK8QAqxgOoGA+gYjyAivEAKsYDqBgPoGI8gIrxACrG
-        A6gYD6BiPICK8QAqxgOoGA+gYjyAivEAKsYDqBgPoGI8gIrxACrGA6gYD6BiPICK8QAqxgOoGA+gcjke
-        j4+PknTs5cuX5/F49uzZXz///PPvnmKfffbZ3z755JN/nM503aeffvr3dDrThy/vNu/3dPYxNuPxxU/G
-        4ymXNZy+PZ3puvEmnc704cu7nd75t/lT6vjjUyqXn49wOtN1w3gslnc7GY+tcvn5CKczXTeMx2J5t5Px
-        2CqXn49wOtN1w3gslnc7GY+tcvn5CKczXTeMx2J5t5Px2CqXn49wOtN1w3gslnc7GY+tcvn5CKczXTeM
-        x2J5t5Px2CqXn49wOtN1w3gslnc7GY+tcvn5CKczXTeMx2J5t5Px2CqXn49wOtN1w3gslnc7GY+tcvn5
-        CKczXTeMx2J5t5Px2CqXn49wOtN1w3gslnc7GY+tcvn5CKczXTeMx2J5t5Px2CqXn49wOtN1w3gslnc7
-        GY+tcvn5CKczXTeMx2J5t5Px2CqXn49wOtN1w3gslnc7GY+tcvn5CKczXTeMx2J5t5Px2CqXn49wOtN1
-        w3gslnc7GY+tcvn5CKczXTeMx2J5t5Px2CqXn49wOtN1w3gslnc7GY+tcvn5CKczXTeMx2J5t5Px2CqX
-        n49wOtN1w3gslnc7GY+tcvn5CKczXTeMx2J5t5Px2CqXn49wOtN1w3gslnc7GY+tcvn5CKczXTeMx2J5
-        t5Px2CqXn49wOtN1w3gslnc7GY+tcvn5CKczXTeMx2J5t5Px2CqXn49wOtN1w3gslnc7GY+tcvn5CKcz
-        XTeMx2J5t5Px2CqXn49wOtN1w3gslnc7GY+tcvn5CKczXTeMx2J5t5Px2CqXn49wOtN1w3gslnc7GY+t
-        cvn5CKczXTeMx2J5t5Px2CqXn49wOtN1w3gslnc7GY+tcvn5CKczXTeMx2J5t5Px2CqXn49wOtN1w3gs
-        lnc7GY+tcvn5CKczXTeMx2J5t5Px2CqXn49wOtN1w3gslnc7GY+tcvn5CKczXTeMx2J5t9PTHo/8Azzh
-        /jx993+/6f36y386nenDl3eb93s6+xj7w2k83r569epJ9vXXX7/98ssvj2e67quvvvpXpzN9+PJu835P
-        Zx9bz549y1C8819JP44HwM/JgBgP4FczHkDFeAAV4wFUjAdQMR5AxXgAFeMBVIwHUDEeQMV4ABXjAVSM
-        B1AxHkDFeAAV4wFUjAdQMR5AxXgAFeMBVIwHUDEeQMV4ABXjAVSMB1AxHkDFeAAV4wFUjAdQMR5AxXgA
-        FeMBVIwHUDEeQMV4ABXjAVSMB1AxHkDFeAAV4wFUjAdQMR5AxXgAFeMBVIwHUDEeQMV4ABXjAVSMB1Ax
-        HkDFeAAV4wFUjAdQMR5AxXgAFeMBVIwHUDEeQMV4ABXjAVSMB1AxHkDFeAAV4wFUjAdQMR5AxXgAFeMB
-        VIwHUDEeQMV4ABXjAVSMB1AxHkDFeAAV4wFUjAdQMR5AxXgAFeMBVIwHUDEeQMV4ABXjAVSMB1C5HA9J
-        +oV+Oh5PofEmnc7U5U71Wzr++DHmof/+uVP9lo4/fox56L9/7nS38e30zv8KPKWOP36M5ZGn05m63Olu
-        w3jcUR55Op2py53uNozHHeWRp9OZutzpbsN43FEeeTqdqcud7jaMxx3lkafTmbrc6W7DeNxRHnk6nanL
-        ne42jMcd5ZGn05m63Oluw3jcUR55Op2py53uNozHHeWRp9OZutzpbsN43FEeeTqdqcud7jaMxx3lkafT
-        mbrc6W7DeNxRHnk6nanLne42jMcd5ZGn05m63Oluw3jcUR55Op2py53uNozHHeWRp9OZutzpbsN43FEe
-        eTqdqcud7jaMxx3lkafTmbrc6W7DeNxRHnk6nanLne42jMcd5ZGn05m63Oluw3jcUR55Op2py53uNozH
-        HeWRp9OZutzpbsN43FEeeTqdqcud7jaMxx3lkafTmbrc6W7DeNxRHnk6nanLne42jMcd5ZGn05m63Olu
-        w3jcUR55Op2py53uNozHHeWRp9OZutzpbsN43FEeeTqdqcud7jaMxx3lkafTmbrc6W7DeNxRHnk6nanL
-        ne42jMcd5ZGn05m63Oluw3jcUR55Op2py53uNozHHeWRp9OZutzpbsN43FEeeTqdqcud7jaMxx3lkafT
-        mbrc6W7DeNxRHnk6nanLne42jMcd5ZGn05m63Oluw3jcUR55Op2py53uNozHHeWRp9OZutzpbsN43FEe
-        eTqdqcud7jaMxx3lkafTmbrc6W7j6Y/HyB+S9L69+XE8AN7HN998YzyAX894ABXjAVSMB1AxHkDFeAAV
-        4wFUjAdQMR5AxXgAFeMBVIwHUDEeQMV4ABXjAVSMB1AxHkDFeAAV4wFUjAdQMR5AxXgAFeMBVIwHUDEe
-        QMV4ABXjAVSMB1AxHkDFeAAV4wFUjAdQMR5AxXgAFeMBVIwHUDEeQMV4ABXjAVSMB1AxHkDFeAAV4wFU
-        jAdQMR5AxXgAFeMBVIwHUDEeQMV4ABXjAVSMB1AxHkDFeAAV4wFUjAdQMR5AxXgAFeMBVIwHUDEeQMV4
-        ABXjAVSMB1AxHkDFeAAV4wFUjAdQMR5AxXgAFeMBVIwHUDEeQMV4AJWfjMfj46Mk/WKvX7/+33g8f/78
-        +xcvXvwgSe/Tw8PDn/4J8oIPlh4MYAgAAAAASUVORK5CYII=
-</value>
-  </data>
   <metadata name="helpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>488, 14</value>
   </metadata>
