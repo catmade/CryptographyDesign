@@ -120,7 +120,7 @@
             this.btnEncrypt.DialogResult = System.Windows.Forms.DialogResult.No;
             this.btnEncrypt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnEncrypt.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnEncrypt.Location = new System.Drawing.Point(103, 3);
+            this.btnEncrypt.Location = new System.Drawing.Point(3, 3);
             this.btnEncrypt.Name = "btnEncrypt";
             this.btnEncrypt.Size = new System.Drawing.Size(94, 34);
             this.btnEncrypt.TabIndex = 2;
@@ -131,9 +131,10 @@
             // btnDecrypt
             // 
             this.btnDecrypt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(150)))), ((int)(((byte)(136)))));
+            this.btnDecrypt.DialogResult = System.Windows.Forms.DialogResult.No;
             this.btnDecrypt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDecrypt.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnDecrypt.Location = new System.Drawing.Point(3, 3);
+            this.btnDecrypt.Location = new System.Drawing.Point(103, 3);
             this.btnDecrypt.Name = "btnDecrypt";
             this.btnDecrypt.Size = new System.Drawing.Size(94, 34);
             this.btnDecrypt.TabIndex = 3;
@@ -175,10 +176,11 @@
             this.tbSource.ForeColor = System.Drawing.SystemColors.WindowText;
             this.errorProvider1.SetIconAlignment(this.tbSource, System.Windows.Forms.ErrorIconAlignment.BottomRight);
             this.tbSource.Location = new System.Drawing.Point(63, 3);
+            this.tbSource.Margin = new System.Windows.Forms.Padding(3, 3, 30, 3);
             this.tbSource.Multiline = true;
             this.tbSource.Name = "tbSource";
             this.tbSource.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbSource.Size = new System.Drawing.Size(720, 178);
+            this.tbSource.Size = new System.Drawing.Size(693, 178);
             this.tbSource.TabIndex = 1;
             this.tbSource.TextChanged += new System.EventHandler(this.tbSource_TextChanged);
             // 
@@ -190,10 +192,11 @@
             this.tbTarget.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.errorProvider1.SetIconAlignment(this.tbTarget, System.Windows.Forms.ErrorIconAlignment.BottomLeft);
             this.tbTarget.Location = new System.Drawing.Point(63, 227);
+            this.tbTarget.Margin = new System.Windows.Forms.Padding(3, 3, 30, 3);
             this.tbTarget.Multiline = true;
             this.tbTarget.Name = "tbTarget";
             this.tbTarget.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbTarget.Size = new System.Drawing.Size(720, 178);
+            this.tbTarget.Size = new System.Drawing.Size(693, 178);
             this.tbTarget.TabIndex = 6;
             // 
             // errorProvider1
@@ -501,6 +504,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(786, 408);
             this.tableLayoutPanel1.TabIndex = 8;
             // 
@@ -514,10 +518,10 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
-            this.tableLayoutPanel2.Controls.Add(this.btnEncrypt, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnDecrypt, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnEncrypt, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.ckbCopyToClipBoard, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.ckbPasteFromClipBoard, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnDecrypt, 1, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(60, 184);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
